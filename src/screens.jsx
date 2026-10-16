@@ -10,6 +10,7 @@ import {
 } from "./ui.jsx";
 import { CLUBS, INTRA, SEARCH, TEAMS, EVENTS, FAQ } from "./data.js";
 import { searchAll } from "./search.js";
+import { clubDetail, clubFromResult, teamDetail } from "./detail.js";
 
 const GENDERS = ["All", "Men's", "Women's", "Co-Ed"].map((g) => [g, g]);
 const norm = (s) => s.toLowerCase().replace(/[^a-z]/g, "");
@@ -137,7 +138,9 @@ export function Clubs({ ctx }) {
               <span className="dot">{c.g}</span>
               <button
                 className="btn dk"
-                onClick={() => ctx.toast("Request sent to " + c.n)}
+                onClick={() =>
+                  ctx.go("detail", { detail: clubDetail(c), waiver: false })
+                }
               >
                 Join Club
               </button>
@@ -242,7 +245,10 @@ export function Search({ ctx }) {
               onClick={() =>
                 r.k === "i"
                   ? ctx.go("teams", { team: r.sport })
-                  : ctx.toast("Request sent to " + r.t)
+                  : ctx.go("detail", {
+                      detail: clubFromResult(r),
+                      waiver: false,
+                    })
               }
             >
               Join
@@ -282,7 +288,10 @@ export function Teams({ ctx }) {
               className="btn"
               onClick={() =>
                 t[5]
-                  ? ctx.go("waiver", { team: t[0], waiver: false })
+                  ? ctx.go("detail", {
+                      detail: teamDetail(t, ctx.S.team),
+                      waiver: false,
+                    })
                   : ctx.toast("Registration closed")
               }
             >
@@ -295,9 +304,57 @@ export function Teams({ ctx }) {
   );
 }
 
+export function Detail({ ctx }) {
+  const d = ctx.S.detail;
+  if (!d) return <Stub ctx={ctx} title="Details" />;
+  const club = d.kind === "Club";
+  return (
+    <>
+      <TopBar title={club ? "Club Info" : "Team Info"} onBack={ctx.back} />
+      <div className="card">
+        <div
+          className="img"
+          style={{
+            height: 120,
+            background: `linear-gradient(120deg,${d.colors[0]},${d.colors[1]})`,
+          }}
+        />
+        <div className="bd">
+          <span className={"pk " + (club ? "c" : "i")}>{d.kind}</span>
+          <h3 style={{ fontSize: 20 }}>{d.title}</h3>
+          <div className="chips">
+            {d.chips.map((c) => (
+              <span className="tag m" key={c}>
+                {c}
+              </span>
+            ))}
+          </div>
+          <p style={{ marginBottom: 0, fontSize: 12 }}>{d.desc}</p>
+        </div>
+      </div>
+      <Section title="Details" />
+      <div className="info">
+        {d.rows.map(([k, v]) => (
+          <div className="irow" key={k}>
+            <span>{k}</span>
+            <b>{v}</b>
+          </div>
+        ))}
+      </div>
+      <button
+        className="btn wide"
+        onClick={() => ctx.go("waiver", { waiver: false })}
+      >
+        Sign Waiver
+      </button>
+    </>
+  );
+}
+
 export function Waiver({ ctx }) {
   const [msg, setMsg] = useState("");
-  const { waiver, team } = ctx.S;
+  const { waiver, team, detail } = ctx.S;
+
   const send = () => {
     if (!waiver) return ctx.toast("Please accept the waiver first");
     ctx.toast("Join request sent!");
@@ -310,8 +367,8 @@ export function Waiver({ ctx }) {
           <Icon name="back" />
         </button>
         <div className="ttl red">
-          {team.toUpperCase()}
-          <small>Intramural Basketball</small>
+          {(detail?.title || team).toUpperCase()}
+          <small>{detail?.sub || "Intramural Basketball"}</small>
         </div>
         <span />
       </div>

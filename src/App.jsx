@@ -1,29 +1,53 @@
-import { useState, useRef, useEffect } from 'react'
-import Icon from './Icon.jsx'
-import { Home, Clubs, Intramurals, Search, Teams, Waiver, Calendar, Help, Stub } from './screens.jsx'
+import { useState, useRef, useEffect } from "react";
+import Icon from "./Icon.jsx";
+import {
+  Home,
+  Clubs,
+  Intramurals,
+  Search,
+  Teams,
+  Waiver,
+  Calendar,
+  Help,
+  Stub,
+  Detail,
+} from "./screens.jsx";
 
 export default function App() {
-  const [stack, setStack] = useState(['home'])
-  const [S, setS] = useState({ q: 'Basketball', tab: 'all', gender: 'All', waiver: false, team: 'Basketball', sel: null, faq: 0 })
-  const [toastMsg, setToastMsg] = useState('')
-  const timer = useRef()
-  const scroller = useRef()
-  const screen = stack[stack.length - 1]
+  const [stack, setStack] = useState(["home"]);
+  const [S, setS] = useState({
+    q: "Basketball",
+    tab: "all",
+    gender: "All",
+    waiver: false,
+    team: "Basketball",
+    sel: null,
+    faq: 0,
+  });
+  const [toastMsg, setToastMsg] = useState("");
+  const timer = useRef();
+  const scroller = useRef();
+  const screen = stack[stack.length - 1];
 
-  useEffect(() => { scroller.current?.scrollTo(0, 0) }, [screen])
+  useEffect(() => {
+    scroller.current?.scrollTo(0, 0);
+  }, [screen]);
 
   const ctx = {
     S,
-    set: patch => setS(s => ({ ...s, ...patch })),
-    go: (name, patch) => { if (patch) setS(s => ({ ...s, ...patch })); setStack(st => [...st, name]) },
-    back: () => setStack(st => (st.length > 1 ? st.slice(0, -1) : st)),
-    root: name => setStack([name]),
-    toast: msg => {
-      setToastMsg(msg)
-      clearTimeout(timer.current)
-      timer.current = setTimeout(() => setToastMsg(''), 1800)
+    set: (patch) => setS((s) => ({ ...s, ...patch })),
+    go: (name, patch) => {
+      if (patch) setS((s) => ({ ...s, ...patch }));
+      setStack((st) => [...st, name]);
     },
-  }
+    back: () => setStack((st) => (st.length > 1 ? st.slice(0, -1) : st)),
+    root: (name) => setStack([name]),
+    toast: (msg) => {
+      setToastMsg(msg);
+      clearTimeout(timer.current);
+      timer.current = setTimeout(() => setToastMsg(""), 1800);
+    },
+  };
 
   const views = {
     home: <Home ctx={ctx} />,
@@ -36,30 +60,43 @@ export default function App() {
     help: <Help ctx={ctx} />,
     profile: <Stub ctx={ctx} title="Profile" />,
     notifs: <Stub ctx={ctx} title="Notifications" />,
-  }
+    detail: <Detail ctx={ctx} />,
+  };
 
-  const inSearch = ['search', 'teams', 'waiver'].includes(screen)
+  const inSearch = ["search", "teams", "waiver"].includes(screen);
   const tabs = [
-    ['home', 'home', ['home', 'clubs', 'intra'].includes(screen)],
-    [inSearch ? 'search' : 'cal', inSearch ? 'search' : 'calendar', inSearch || screen === 'calendar'],
-    ['user', 'profile', screen === 'profile'],
-    ['bell', 'notifs', screen === 'notifs'],
-  ]
+    ["home", "home", ["home", "clubs", "intra"].includes(screen)],
+    [
+      inSearch ? "search" : "cal",
+      inSearch ? "search" : "calendar",
+      inSearch || screen === "calendar",
+    ],
+    ["user", "profile", screen === "profile"],
+    ["bell", "notifs", screen === "notifs"],
+  ];
 
   return (
     <div className="phone">
-      <div className="scroll" ref={scroller}>{views[screen]}</div>
-      {screen !== 'help' && (
+      <div className="scroll" ref={scroller}>
+        {views[screen]}
+      </div>
+      {screen !== "help" && (
         <nav className="nav">
           {tabs.map(([icon, target, on]) => (
-            <button key={target} className={on ? 'on' : ''}
-              onClick={() => { ctx.set({ gender: 'All' }); ctx.root(target) }}>
+            <button
+              key={target}
+              className={on ? "on" : ""}
+              onClick={() => {
+                ctx.set({ gender: "All" });
+                ctx.root(target);
+              }}
+            >
               <Icon name={icon} />
             </button>
           ))}
         </nav>
       )}
-      <div className={'toast' + (toastMsg ? ' show' : '')}>{toastMsg}</div>
+      <div className={"toast" + (toastMsg ? " show" : "")}>{toastMsg}</div>
     </div>
-  )
+  );
 }
