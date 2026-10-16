@@ -53,6 +53,8 @@ export const INTRA = [
     "Jan 15",
     "🎯",
   ],
+  ["Broomball", "Co-Ed", "Here for a good time!", "9v9", "Oct 15", "🧹"],
+
   [
     "Flag Football",
     "Men's",

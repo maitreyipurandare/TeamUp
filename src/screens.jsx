@@ -9,11 +9,14 @@ import {
   GameStrip,
 } from "./ui.jsx";
 import { CLUBS, INTRA, SEARCH, TEAMS, EVENTS, FAQ } from "./data.js";
+import { searchAll } from "./search.js";
 
 const GENDERS = ["All", "Men's", "Women's", "Co-Ed"].map((g) => [g, g]);
 const norm = (s) => s.toLowerCase().replace(/[^a-z]/g, "");
 
 export function Home({ ctx }) {
+  const [text, setText] = useState("");
+  const submit = () => ctx.go("search", { q: text.trim(), tab: "all" });
   return (
     <>
       <BrandBar
@@ -21,11 +24,10 @@ export function Home({ ctx }) {
         onGear={() => ctx.toast("Settings")}
       />
       <SearchBar
-        readOnly
-        onFocus={(e) => {
-          e.target.blur();
-          ctx.go("search", { q: "Basketball", tab: "all" });
-        }}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && submit()}
+        enterKeyHint="search"
       />
       <div className="tiles">
         <button
@@ -199,8 +201,9 @@ export function Intramurals({ ctx }) {
 
 export function Search({ ctx }) {
   const { q, tab } = ctx.S;
-  const clubs = SEARCH.filter((r) => r.k === "c").length;
-  const shown = SEARCH.filter((r) => tab === "all" || r.k === tab);
+  const all = searchAll(q);
+  const clubs = all.filter((r) => r.k === "c").length;
+  const shown = all.filter((r) => tab === "all" || r.k === tab);
   return (
     <>
       <BrandBar onBack={ctx.back} onGear={() => ctx.toast("Settings")} />
@@ -211,9 +214,9 @@ export function Search({ ctx }) {
       />
       <Pills
         items={[
-          ["all", "All", SEARCH.length],
+          ["all", "All", all.length],
           ["c", "Clubs", clubs],
-          ["i", "Intramurals", SEARCH.length - clubs],
+          ["i", "Intramurals", all.length - clubs],
         ]}
         value={tab}
         onChange={(t) => ctx.set({ tab: t })}
@@ -238,7 +241,7 @@ export function Search({ ctx }) {
               className="btn"
               onClick={() =>
                 r.k === "i"
-                  ? ctx.go("teams", { team: "Basketball" })
+                  ? ctx.go("teams", { team: r.sport })
                   : ctx.toast("Request sent to " + r.t)
               }
             >
@@ -247,6 +250,9 @@ export function Search({ ctx }) {
           </div>
         </div>
       ))}
+      {!shown.length && (
+        <div className="empty">No clubs or leagues match “{q}”</div>
+      )}
     </>
   );
 }
