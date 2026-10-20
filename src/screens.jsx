@@ -378,15 +378,46 @@ export function Waiver({ ctx }) {
           Release Of Liability <Icon name="down" size={16} />
         </div>
         <div className="txt">
-          ...activities and to reimburse and make good to the UNIVERSITY any
-          loss, damage, or cost the UNIVERSITY may have to pay as a result of my
-          participation in the program.
+          WAIVER AND RELEASE OF LIABILITY for Campus Recreation Activities
           <br />
           <br />
           DISCLAIMER: The UNIVERSITY OF NEBRASKA is NOT RESPONSIBLE for any
           injury or loss of property to any person suffered while warming up,
           practicing, traveling, playing, or participating in Campus Recreation
           Activities.
+          <br />
+          <br />
+          The Releasor wishes to participate in Campus Recreation Activities.  In consideration for the privilege of participation in the program, the Releasor consents and agrees to the following:
+          <br />
+          <br />
+          1. Releasor certifies that he/she is physically capable of participating in Campus Recreation Activities and that he/she will take responsibility for physical fitness and capability to perform under normal conditions of Campus Recreation Activities. Releasor is encouraged to get his/her physician’s opinion prior to participating in any Campus Recreation Activities. In the event of a medical emergency, the University of Nebraska or its representatives have my permission to take whatever measures they deem reasonable to render assistance and that I and/or my family will be financially responsible for any expenses involved.
+          <br />
+          <br />
+          1. Releasor realizes that participation in Campus Recreation Activities involves certain risks and danger and is a vigorous activity involving severe respiratory and cardiovascular stress. Releasor has hereby been made aware that participation in Campus Recreation Activities has the following non-exclusive list of certain risks which I accept: death; head, eye, neck, and spinal injury resulting in complete or partial paralysis; brain damage; heart attack; blisters; cuts; lacerations; abrasions; concussions; contusions; strains; sprains; dislocations; fractures; cold and heat injuries; water immersion; drowning; lightning strikes; injury to bones, joints, muscles, internal organs; and environmental conditions. In addition, I understand and accept the incidental risks of travel to and from the site of activity; participation at sites that may be remote from available medical assistance; and the possible reckless conduct of other participants.
+          <br />
+          <br />
+          1. Due to the continued outbreak of COVID-19 in most areas of the world and the U.S., including the state of Nebraska, the University of Nebraska urges caution for individuals participating in in-person Campus Recreation activities during the fall of 2020.  Individuals who choose to participate in in-person activities this summer must be aware of the potential risks that exposure to the novel virus poses to their health and safety, that the University of Nebraska is not able to lessen those risks, and that participation in those in-person activities does not create any liability on behalf of the University of Nebraska. The University encourages all individuals to know, understand, and follow the guidance from local governments and local health departments in the area where individuals may be participating in in-person activities, particularly since that guidance can change rapidly.
+          <br />
+          <br />
+          1. Consequently, while understanding that the University has taken precautions to provide organization, supervision, and equipment for reasonable safety, Releasor assumes joint and personal responsibility for safety while participating in Campus Recreation Activities. Pursuant to that joint and personal responsibility, Releasor agrees to comply with the instructions and direction of representatives and staff members of Campus Recreation. Releasor understands that failure to abide by the instructions and rules may result in his/her termination from the activity. Releasor accepts personal responsibility to ensure that any equipment needed to participate in the Campus Recreation Activities and used by the Releasor is safe and functioning properly and to refrain from causing loss or damage to the property of the University and Campus Recreation. Releasor realizes that he/she is solely responsible for any personal equipment, supplies, or property he/she may choose to use during the duration of the activity.
+          <br />
+          <br />
+          1. Releasor further agrees to indemnify and hold harmless the University for any and all claims or actions as a result of engaging in, using University facilities and equipment, or receiving instruction for Campus Recreation Activities or any activities incidental thereto whatsoever, whenever, or however the same may occur.
+          <br />
+          <br />
+          1. Releasor acknowledges that photographs and digital images may be taken during participation. Releasor understands and agrees that the images may be published and used by the University.
+          <br />
+          <br />
+          1. Releasor is aware that if he/she uses a vehicle not operated by the University for transportation to, at, or leaving the activity site, the University is NOT responsible for any damage caused by or arising from Releasor’s use of such vehicle. Furthermore, Releasor acknowledges that he/she is solely responsible for any action he/she takes outside the scope of those actions permitted by the University for purposes of the particular activity regardless if occurring before, during, or after the duration of the activity. Releasor agrees to follow University policies when operating a University owned vehicle.
+          <br />
+          <br />
+          1. In consideration of participation in Campus Recreation Activities, Releasor hereby RELEASES and covenants not-to-sue the UNIVERSITY for any and all present and future claims resulting from ordinary negligence on the part of the UNIVERSITY for property damage, personal injury, or wrongful death arising as a result of my engaging in, using University facilities and equipment, or receiving instruction for Campus Recreation Activities or activities thereto, wherever, whenever, or however the same may occur. Releasor hereby voluntarily waives any and all claims or actions resulting from ordinary negligence, both present and future, that may be made by Releasor’s family, estate, personal representative, heirs, or assigns.
+          <br />
+          <br />
+          I have read and understand that this WAIVER is intended to be as broad and inclusive as permitted by the laws of the State of Nebraska and agree that if any part is held invalid, the remaining parts of this WAIVER AND RELEASE will continue in full force and effect as intended.  I further agree the venue for any legal proceeding shall be in the State of Nebraska.
+          <br />
+          <br />
+          I understand the rights that I am waiving and that I am freely signing this WAIVER AND RELEASE.  I have read and fully understand that by signing this agreement I am giving up legal rights and remedies, which may be available to me for ordinary negligence of the University.  I further agree to follow and abide by the regulations and rules of the UNIVERSITY as they pertain to Campus Recreation Activities and to reimburse and make good to the UNIVERSITY any loss, damage, or cost the UNIVERSITY may have to pay as a result of my participation in the program.
         </div>
         <div
           className={"chk" + (waiver ? " on" : "")}
