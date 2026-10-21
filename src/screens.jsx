@@ -458,7 +458,7 @@ export function Calendar({ ctx }) {
   );
   return (
     <>
-      <TopBar title="Calendar" onBack={ctx.back} />
+      <TopBar title="Calendar" onBack={() => ctx.root("home")}/>
       <Section title="Upcoming Games" />
       <div className="hs">
         <div className="game" style={{ width: "100%" }}>
@@ -560,10 +560,10 @@ export function Help({ ctx }) {
   );
 }
 
-export function Stub({ ctx, title }) {
+export function Stub({ ctx, title, onBack }) {
   return (
     <>
-      <TopBar title={title} onBack={ctx.back} />
+      <TopBar title={title} onBack={onBack || ctx.back} />
       <div className="empty">Nothing here in this prototype.</div>
     </>
   );

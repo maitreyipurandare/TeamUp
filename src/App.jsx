@@ -58,8 +58,20 @@ export default function App() {
     waiver: <Waiver ctx={ctx} />,
     calendar: <Calendar ctx={ctx} />,
     help: <Help ctx={ctx} />,
-    profile: <Stub ctx={ctx} title="Profile" />,
-    notifs: <Stub ctx={ctx} title="Notifications" />,
+    profile: (
+    <Stub
+      ctx={ctx}
+      title="Profile"
+      onBack={() => ctx.root("home")}
+    />
+  ),
+  notifs: (
+    <Stub
+      ctx={ctx}
+      title="Notifications"
+      onBack={() => ctx.root("home")}
+    />
+  ),
     detail: <Detail ctx={ctx} />,
   };
 
