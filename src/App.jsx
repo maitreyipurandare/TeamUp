@@ -9,6 +9,7 @@ import {
   Waiver,
   Calendar,
   Notifications,
+  Profile,
   Help,
   Stub,
   Detail,
@@ -63,13 +64,7 @@ export default function App() {
     waiver: <Waiver ctx={ctx} />,
     calendar: <Calendar ctx={ctx} />,
     help: <Help ctx={ctx} />,
-    profile: (
-    <Stub
-      ctx={ctx}
-      title="Profile"
-      onBack={() => ctx.root("home")}
-    />
-  ),
+    profile: <Profile ctx={ctx} />,
     notifs: <Notifications ctx={ctx} />,
     detail: <Detail ctx={ctx} />,
   };

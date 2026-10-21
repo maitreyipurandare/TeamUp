@@ -8,7 +8,7 @@ import {
   Section,
   GameStrip,
 } from "./ui.jsx";
-import { CLUBS, INTRA, SEARCH, TEAMS, EVENTS, FAQ } from "./data.js";
+import { CLUBS, INTRA, SEARCH, TEAMS, EVENTS, FAQ, PROFILE } from "./data.js";
 import { searchAll } from "./search.js";
 import { clubDetail, clubFromResult, teamDetail } from "./detail.js";
 
@@ -601,6 +601,77 @@ export function Notifications({ ctx }) {
         );
       })}
       {!shown.length && <div className="empty">No updates in this filter.</div>}
+    </>
+  );
+}
+
+export function Profile({ ctx }) {
+  return (
+    <>
+      <TopBar title="Profile" onBack={() => ctx.root("home")} />
+      <div className="profile-head">
+        <div className="profile-avatar" aria-label="Generic profile picture">
+          <Icon name="user" size={42} />
+        </div>
+        <div className="profile-heading">
+          <h2>{PROFILE.fullName}</h2>
+          <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+        </div>
+      </div>
+
+      <Section title="About" />
+      <div className="info profile-info">
+        <div className="irow">
+          <span>Preferred name</span>
+          <b>{PROFILE.preferredName}</b>
+        </div>
+        <div className="irow">
+          <span>Pronouns</span>
+          <b>{PROFILE.pronouns}</b>
+        </div>
+      </div>
+
+      <Section title="My Teams" right={<em>{PROFILE.teams.length} TEAMS</em>} />
+      <div className="profile-list">
+        {PROFILE.teams.map((team) => (
+          <div className="profile-team" key={team.name}>
+            <span className="profile-team-icon">
+              <Icon name="users" size={16} />
+            </span>
+            <span className="profile-team-copy">
+              <b>{team.name}</b>
+              <small>{team.detail}</small>
+            </span>
+          </div>
+        ))}
+      </div>
+      <button
+        className="profile-join-link"
+        onClick={() => ctx.go("intra", { gender: "All" })}
+      >
+        Join more <Icon name="chev" size={13} />
+      </button>
+
+      <Section title="Played Games" />
+      <div className="profile-list profile-games">
+        {PROFILE.playedGames.map((game) => (
+          <button
+            className="profile-game"
+            key={`${game.sport}-${game.day}`}
+            onClick={() => ctx.root("calendar", { sel: game.day })}
+          >
+            <span className="profile-game-date">{game.date}</span>
+            <span className="profile-game-copy">
+              <b>{game.matchup}</b>
+              <small>{game.sport}</small>
+            </span>
+            <span className="profile-game-score">
+              <b>{game.score}</b>
+              <small>{game.result}</small>
+            </span>
+          </button>
+        ))}
+      </div>
     </>
   );
 }

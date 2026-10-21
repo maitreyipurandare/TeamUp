@@ -786,6 +786,126 @@ h3 {
   font-size: 10px;
 }
 
+/* profile */
+.profile-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 2px 18px;
+}
+.profile-avatar {
+  width: 68px;
+  height: 68px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #42658a;
+}
+.profile-heading {
+  min-width: 0;
+}
+.profile-heading h2 {
+  font: 700 20px Outfit;
+  line-height: 1.2;
+}
+.profile-heading a {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 4px;
+  color: var(--mut);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+.profile-info {
+  margin-bottom: 20px;
+}
+.profile-list {
+  margin-bottom: 20px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.profile-team,
+.profile-game {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.profile-team:last-child,
+.profile-game:last-child {
+  border-bottom: 0;
+}
+.profile-team-icon {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--tan);
+  color: var(--red);
+}
+.profile-team-copy,
+.profile-game-copy {
+  min-width: 0;
+  flex: 1;
+}
+.profile-team-copy b,
+.profile-game-copy b {
+  display: block;
+  font: 600 12px Outfit;
+}
+.profile-team-copy small,
+.profile-game-copy small {
+  display: block;
+  margin-top: 2px;
+  color: var(--mut);
+  font-size: 10px;
+}
+.profile-join-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin: -12px 0 18px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--red);
+  font: 600 12px Outfit;
+  cursor: pointer;
+}
+.profile-game {
+  width: 100%;
+  background: #fff;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+.profile-game-date {
+  width: 40px;
+  flex: none;
+  color: var(--red);
+  font: 700 10px "Roboto Mono";
+}
+.profile-game-score {
+  flex: none;
+  text-align: right;
+}
+.profile-game-score b {
+  display: block;
+  font: 700 12px Outfit;
+}
+.profile-game-score small {
+  color: #39744a;
+  font-size: 9px;
+}
+
 /* details */
 .chips {
   display: flex;

@@ -191,6 +191,36 @@ export const EVENTS = {
   },
 };
 
+export const PROFILE = {
+  fullName: "Jane Doe",
+  email: "jane.doe@huskers.unl.edu",
+  preferredName: "Jane",
+  pronouns: "She / her",
+  teams: [
+    { name: "Flag Football", detail: "Alpha Chi Omega" },
+    { name: "Volleyball Club", detail: "Vice President" },
+    { name: "Broomball", detail: "Member" },
+  ],
+  playedGames: [
+    {
+      day: 14,
+      sport: "Flag Football",
+      matchup: "Alpha Chi Omega vs Delta Upsilon",
+      date: "Oct 14",
+      score: "21 - 14",
+      result: "Win",
+    },
+    {
+      day: 1,
+      sport: "Volleyball",
+      matchup: "Spike Tysons vs Block Busters",
+      date: "Oct 1",
+      score: "2 - 1",
+      result: "Win",
+    },
+  ],
+};
+
 export const FAQ = [
   [
     "How do I join a club?",
