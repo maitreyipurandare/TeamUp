@@ -8,6 +8,7 @@ import {
   Teams,
   Waiver,
   Calendar,
+  Notifications,
   Help,
   Stub,
   Detail,
@@ -23,6 +24,7 @@ export default function App() {
     team: "Basketball",
     sel: null,
     faq: 0,
+    readNotifications: [],
   });
   const [toastMsg, setToastMsg] = useState("");
   const timer = useRef();
@@ -41,7 +43,10 @@ export default function App() {
       setStack((st) => [...st, name]);
     },
     back: () => setStack((st) => (st.length > 1 ? st.slice(0, -1) : st)),
-    root: (name) => setStack([name]),
+    root: (name, patch) => {
+      if (patch) setS((s) => ({ ...s, ...patch }));
+      setStack([name]);
+    },
     toast: (msg) => {
       setToastMsg(msg);
       clearTimeout(timer.current);
@@ -65,13 +70,7 @@ export default function App() {
       onBack={() => ctx.root("home")}
     />
   ),
-  notifs: (
-    <Stub
-      ctx={ctx}
-      title="Notifications"
-      onBack={() => ctx.root("home")}
-    />
-  ),
+    notifs: <Notifications ctx={ctx} />,
     detail: <Detail ctx={ctx} />,
   };
 

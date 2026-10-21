@@ -734,6 +734,58 @@ h3 {
   padding: 30px 0;
 }
 
+/* notifications */
+.notif {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding: 12px;
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+.notif.unread {
+  border-left-color: var(--red);
+}
+.notif-top,
+.notif-kind,
+.notif-meta {
+  display: flex;
+  align-items: center;
+}
+.notif-top {
+  justify-content: space-between;
+  color: var(--mut);
+  font: 500 10px "Roboto Mono";
+}
+.notif-kind {
+  gap: 5px;
+  color: var(--red);
+  font: 700 9px "Roboto Mono";
+  text-transform: uppercase;
+}
+.notif strong {
+  font: 700 14px Outfit;
+}
+.notif-message {
+  font-size: 11px;
+  color: #444;
+}
+.notif-meta {
+  gap: 5px;
+  padding-top: 7px;
+  border-top: 1px solid var(--line);
+  color: var(--mut);
+  font-size: 10px;
+}
+
 /* details */
 .chips {
   display: flex;

@@ -514,6 +514,97 @@ export function Calendar({ ctx }) {
   );
 }
 
+export function Notifications({ ctx }) {
+  const { readNotifications = [] } = ctx.S;
+  const [filter, setFilter] = useState("all");
+  const items = Object.entries(EVENTS)
+    .filter(([day]) => Number(day) > 14)
+    .flatMap(([day, event]) => {
+      const date = Number(day);
+      const upcoming = {
+        id: `event-${day}`,
+        type: "event",
+        day: date,
+        event,
+        title: `${event.g} game scheduled`,
+        message: `${event.a} vs ${event.b}`,
+      };
+      const update = event.update && {
+        id: `update-${day}`,
+        type: "update",
+        day: date,
+        event,
+        title: event.update.title,
+        message: event.update.message,
+      };
+      return update ? [update, upcoming] : [upcoming];
+    });
+  const unread = items.filter((item) => !readNotifications.includes(item.id));
+  const shown = items.filter((item) => filter === "all" || item.type === filter);
+  const markRead = (id) =>
+    ctx.set({ readNotifications: [...new Set([...readNotifications, id])] });
+
+  return (
+    <>
+      <TopBar title="Notifications" onBack={() => ctx.root("home")} />
+      <Section
+        title="Your updates"
+        right={
+          unread.length > 0 && (
+            <a
+              onClick={() =>
+                ctx.set({
+                  readNotifications: items.map((item) => item.id),
+                })
+              }
+            >
+              Mark all read
+            </a>
+          )
+        }
+      />
+      <Pills
+        items={[
+          ["all", "All", items.length],
+          ["event", "Games", items.filter((item) => item.type === "event").length],
+          ["update", "Updates", items.filter((item) => item.type === "update").length],
+        ]}
+        value={filter}
+        onChange={setFilter}
+      />
+      {shown.map((item) => {
+        const isRead = readNotifications.includes(item.id);
+        return (
+          <button
+            className={`notif${isRead ? "" : " unread"}`}
+            key={item.id}
+            onClick={() => {
+              markRead(item.id);
+              ctx.root("calendar", { sel: item.day });
+            }}
+          >
+            <span className="notif-top">
+              <span className="notif-kind">
+                <Icon name={item.type === "update" ? "bell" : "cal"} size={13} />
+                {item.type === "update" ? "Game update" : "Upcoming game"}
+              </span>
+              <span>Oct {item.day}</span>
+            </span>
+            <strong>{item.title}</strong>
+            <span className="notif-message">{item.message}</span>
+            <span className="notif-meta">
+              <Icon name="cal" size={11} /> {item.event.d}
+              <span>·</span>
+              <Icon name="pin" size={11} /> {item.event.p}
+            </span>
+          </button>
+        );
+      })}
+      {!shown.length && <div className="empty">No updates in this filter.</div>}
+    </>
+  );
+}
+
 export function Help({ ctx }) {
   const { faq } = ctx.S;
   return (
