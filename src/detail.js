@@ -52,13 +52,14 @@ const DEFAULT = {
   fee: "Free",
 };
 
-function build(title, desc, colors, chips, info, members) {
+function build(title, desc, colors, chips, info, members, image) {
   return {
     kind: "Club",
     title,
     sub: "Student Club",
     desc,
     colors,
+    image,
     chips,
     rows: [
       ["Meets", info.meets],
@@ -78,7 +79,8 @@ export const clubDetail = (c) =>
     c.c,
     [`${c.m} members`, c.g],
     CLUB_INFO[c.n] || DEFAULT,
-    `${c.m} active`
+    `${c.m} active`,
+    c.image
   );
 
 // From a search result (uses CLUBS data if the club exists there)
