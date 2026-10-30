@@ -354,12 +354,19 @@ export function Detail({ ctx }) {
 export function Waiver({ ctx }) {
   const [msg, setMsg] = useState("");
   const { waiver, team, detail } = ctx.S;
+  const [requestSent, setRequestSent] = useState(false);
 
   const send = () => {
     //if (!waiver) return ctx.toast("Please accept the waiver first");
+    setRequestSent(true);
     ctx.toast("Join request sent!");
-    setTimeout(() => ctx.root("home"), 900);
+    //setTimeout(() => ctx.root("home"), 900);
   };
+  function undo() {
+  // Reverse the join request here
+  setRequestSent(false);
+  ctx.toast("Join request undone!");
+}
   return (
     <>
       <div className="top">
@@ -442,6 +449,12 @@ export function Waiver({ ctx }) {
         >
         Send Join Request
         </button>
+        {requestSent && (
+        <div>
+          Join request sent!
+          <button type="button" onClick={undo}>Undo</button>
+        </div>
+)}
       </div>
     </>
   );
