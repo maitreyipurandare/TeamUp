@@ -33,6 +33,7 @@ export function Home({ ctx }) {
       <div className="tiles">
         <button
           className="tile a"
+          title="Photo: Rick Dikeman — Indiana vs Tulsa, 2004. CC BY-SA 3.0. See /photo-credits.txt"
           onClick={() => ctx.go("clubs", { gender: "All" })}
         >
           <span className="ic">
@@ -125,7 +126,9 @@ export function Clubs({ ctx }) {
             className="img"
             style={{
               height: 92,
-              background: `linear-gradient(120deg,${c.c[0]},${c.c[1]})`,
+              background: c.image
+                ? `url("${c.image}") center / cover no-repeat`
+                : `linear-gradient(120deg,${c.c[0]},${c.c[1]})`,
             }}
           />
           <div className="bd">
@@ -179,7 +182,9 @@ export function Intramurals({ ctx }) {
               <h3>
                 {i[5]} &nbsp;{i[0]}
               </h3>
-              <span className="tag">{i[1]}</span>
+              <span className="tag" style={{ border: "none" }}>
+                {i[1]}
+              </span>
             </div>
             <p>{i[2]}</p>
             <div className="ft">
@@ -316,7 +321,9 @@ export function Detail({ ctx }) {
           className="img"
           style={{
             height: 120,
-            background: `linear-gradient(120deg,${d.colors[0]},${d.colors[1]})`,
+            background: d.image
+              ? `url("${d.image}") center / cover no-repeat`
+              : `linear-gradient(120deg,${d.colors[0]},${d.colors[1]})`,
           }}
         />
         <div className="bd">
@@ -394,37 +401,128 @@ export function Waiver({ ctx }) {
           Activities.
           <br />
           <br />
-          The Releasor wishes to participate in Campus Recreation Activities.  In consideration for the privilege of participation in the program, the Releasor consents and agrees to the following:
+          The Releasor wishes to participate in Campus Recreation Activities. In
+          consideration for the privilege of participation in the program, the
+          Releasor consents and agrees to the following:
           <br />
           <br />
-          1. Releasor certifies that he/she is physically capable of participating in Campus Recreation Activities and that he/she will take responsibility for physical fitness and capability to perform under normal conditions of Campus Recreation Activities. Releasor is encouraged to get his/her physician’s opinion prior to participating in any Campus Recreation Activities. In the event of a medical emergency, the University of Nebraska or its representatives have my permission to take whatever measures they deem reasonable to render assistance and that I and/or my family will be financially responsible for any expenses involved.
+          1. Releasor certifies that he/she is physically capable of
+          participating in Campus Recreation Activities and that he/she will
+          take responsibility for physical fitness and capability to perform
+          under normal conditions of Campus Recreation Activities. Releasor is
+          encouraged to get his/her physician’s opinion prior to participating
+          in any Campus Recreation Activities. In the event of a medical
+          emergency, the University of Nebraska or its representatives have my
+          permission to take whatever measures they deem reasonable to render
+          assistance and that I and/or my family will be financially responsible
+          for any expenses involved.
           <br />
           <br />
-          1. Releasor realizes that participation in Campus Recreation Activities involves certain risks and danger and is a vigorous activity involving severe respiratory and cardiovascular stress. Releasor has hereby been made aware that participation in Campus Recreation Activities has the following non-exclusive list of certain risks which I accept: death; head, eye, neck, and spinal injury resulting in complete or partial paralysis; brain damage; heart attack; blisters; cuts; lacerations; abrasions; concussions; contusions; strains; sprains; dislocations; fractures; cold and heat injuries; water immersion; drowning; lightning strikes; injury to bones, joints, muscles, internal organs; and environmental conditions. In addition, I understand and accept the incidental risks of travel to and from the site of activity; participation at sites that may be remote from available medical assistance; and the possible reckless conduct of other participants.
+          1. Releasor realizes that participation in Campus Recreation
+          Activities involves certain risks and danger and is a vigorous
+          activity involving severe respiratory and cardiovascular stress.
+          Releasor has hereby been made aware that participation in Campus
+          Recreation Activities has the following non-exclusive list of certain
+          risks which I accept: death; head, eye, neck, and spinal injury
+          resulting in complete or partial paralysis; brain damage; heart
+          attack; blisters; cuts; lacerations; abrasions; concussions;
+          contusions; strains; sprains; dislocations; fractures; cold and heat
+          injuries; water immersion; drowning; lightning strikes; injury to
+          bones, joints, muscles, internal organs; and environmental conditions.
+          In addition, I understand and accept the incidental risks of travel to
+          and from the site of activity; participation at sites that may be
+          remote from available medical assistance; and the possible reckless
+          conduct of other participants.
           <br />
           <br />
-          1. Due to the continued outbreak of COVID-19 in most areas of the world and the U.S., including the state of Nebraska, the University of Nebraska urges caution for individuals participating in in-person Campus Recreation activities during the fall of 2020.  Individuals who choose to participate in in-person activities this summer must be aware of the potential risks that exposure to the novel virus poses to their health and safety, that the University of Nebraska is not able to lessen those risks, and that participation in those in-person activities does not create any liability on behalf of the University of Nebraska. The University encourages all individuals to know, understand, and follow the guidance from local governments and local health departments in the area where individuals may be participating in in-person activities, particularly since that guidance can change rapidly.
+          1. Due to the continued outbreak of COVID-19 in most areas of the
+          world and the U.S., including the state of Nebraska, the University of
+          Nebraska urges caution for individuals participating in in-person
+          Campus Recreation activities during the fall of 2020. Individuals who
+          choose to participate in in-person activities this summer must be
+          aware of the potential risks that exposure to the novel virus poses to
+          their health and safety, that the University of Nebraska is not able
+          to lessen those risks, and that participation in those in-person
+          activities does not create any liability on behalf of the University
+          of Nebraska. The University encourages all individuals to know,
+          understand, and follow the guidance from local governments and local
+          health departments in the area where individuals may be participating
+          in in-person activities, particularly since that guidance can change
+          rapidly.
           <br />
           <br />
-          1. Consequently, while understanding that the University has taken precautions to provide organization, supervision, and equipment for reasonable safety, Releasor assumes joint and personal responsibility for safety while participating in Campus Recreation Activities. Pursuant to that joint and personal responsibility, Releasor agrees to comply with the instructions and direction of representatives and staff members of Campus Recreation. Releasor understands that failure to abide by the instructions and rules may result in his/her termination from the activity. Releasor accepts personal responsibility to ensure that any equipment needed to participate in the Campus Recreation Activities and used by the Releasor is safe and functioning properly and to refrain from causing loss or damage to the property of the University and Campus Recreation. Releasor realizes that he/she is solely responsible for any personal equipment, supplies, or property he/she may choose to use during the duration of the activity.
+          1. Consequently, while understanding that the University has taken
+          precautions to provide organization, supervision, and equipment for
+          reasonable safety, Releasor assumes joint and personal responsibility
+          for safety while participating in Campus Recreation Activities.
+          Pursuant to that joint and personal responsibility, Releasor agrees to
+          comply with the instructions and direction of representatives and
+          staff members of Campus Recreation. Releasor understands that failure
+          to abide by the instructions and rules may result in his/her
+          termination from the activity. Releasor accepts personal
+          responsibility to ensure that any equipment needed to participate in
+          the Campus Recreation Activities and used by the Releasor is safe and
+          functioning properly and to refrain from causing loss or damage to the
+          property of the University and Campus Recreation. Releasor realizes
+          that he/she is solely responsible for any personal equipment,
+          supplies, or property he/she may choose to use during the duration of
+          the activity.
           <br />
           <br />
-          1. Releasor further agrees to indemnify and hold harmless the University for any and all claims or actions as a result of engaging in, using University facilities and equipment, or receiving instruction for Campus Recreation Activities or any activities incidental thereto whatsoever, whenever, or however the same may occur.
+          1. Releasor further agrees to indemnify and hold harmless the
+          University for any and all claims or actions as a result of engaging
+          in, using University facilities and equipment, or receiving
+          instruction for Campus Recreation Activities or any activities
+          incidental thereto whatsoever, whenever, or however the same may
+          occur.
           <br />
           <br />
-          1. Releasor acknowledges that photographs and digital images may be taken during participation. Releasor understands and agrees that the images may be published and used by the University.
+          1. Releasor acknowledges that photographs and digital images may be
+          taken during participation. Releasor understands and agrees that the
+          images may be published and used by the University.
           <br />
           <br />
-          1. Releasor is aware that if he/she uses a vehicle not operated by the University for transportation to, at, or leaving the activity site, the University is NOT responsible for any damage caused by or arising from Releasor’s use of such vehicle. Furthermore, Releasor acknowledges that he/she is solely responsible for any action he/she takes outside the scope of those actions permitted by the University for purposes of the particular activity regardless if occurring before, during, or after the duration of the activity. Releasor agrees to follow University policies when operating a University owned vehicle.
+          1. Releasor is aware that if he/she uses a vehicle not operated by the
+          University for transportation to, at, or leaving the activity site,
+          the University is NOT responsible for any damage caused by or arising
+          from Releasor’s use of such vehicle. Furthermore, Releasor
+          acknowledges that he/she is solely responsible for any action he/she
+          takes outside the scope of those actions permitted by the University
+          for purposes of the particular activity regardless if occurring
+          before, during, or after the duration of the activity. Releasor agrees
+          to follow University policies when operating a University owned
+          vehicle.
           <br />
           <br />
-          1. In consideration of participation in Campus Recreation Activities, Releasor hereby RELEASES and covenants not-to-sue the UNIVERSITY for any and all present and future claims resulting from ordinary negligence on the part of the UNIVERSITY for property damage, personal injury, or wrongful death arising as a result of my engaging in, using University facilities and equipment, or receiving instruction for Campus Recreation Activities or activities thereto, wherever, whenever, or however the same may occur. Releasor hereby voluntarily waives any and all claims or actions resulting from ordinary negligence, both present and future, that may be made by Releasor’s family, estate, personal representative, heirs, or assigns.
+          1. In consideration of participation in Campus Recreation Activities,
+          Releasor hereby RELEASES and covenants not-to-sue the UNIVERSITY for
+          any and all present and future claims resulting from ordinary
+          negligence on the part of the UNIVERSITY for property damage, personal
+          injury, or wrongful death arising as a result of my engaging in, using
+          University facilities and equipment, or receiving instruction for
+          Campus Recreation Activities or activities thereto, wherever,
+          whenever, or however the same may occur. Releasor hereby voluntarily
+          waives any and all claims or actions resulting from ordinary
+          negligence, both present and future, that may be made by Releasor’s
+          family, estate, personal representative, heirs, or assigns.
           <br />
           <br />
-          I have read and understand that this WAIVER is intended to be as broad and inclusive as permitted by the laws of the State of Nebraska and agree that if any part is held invalid, the remaining parts of this WAIVER AND RELEASE will continue in full force and effect as intended.  I further agree the venue for any legal proceeding shall be in the State of Nebraska.
+          I have read and understand that this WAIVER is intended to be as broad
+          and inclusive as permitted by the laws of the State of Nebraska and
+          agree that if any part is held invalid, the remaining parts of this
+          WAIVER AND RELEASE will continue in full force and effect as intended.
+          I further agree the venue for any legal proceeding shall be in the
+          State of Nebraska.
           <br />
-          <br />
-          I understand the rights that I am waiving and that I am freely signing this WAIVER AND RELEASE.  I have read and fully understand that by signing this agreement I am giving up legal rights and remedies, which may be available to me for ordinary negligence of the University.  I further agree to follow and abide by the regulations and rules of the UNIVERSITY as they pertain to Campus Recreation Activities and to reimburse and make good to the UNIVERSITY any loss, damage, or cost the UNIVERSITY may have to pay as a result of my participation in the program.
+          <br />I understand the rights that I am waiving and that I am freely
+          signing this WAIVER AND RELEASE. I have read and fully understand that
+          by signing this agreement I am giving up legal rights and remedies,
+          which may be available to me for ordinary negligence of the
+          University. I further agree to follow and abide by the regulations and
+          rules of the UNIVERSITY as they pertain to Campus Recreation
+          Activities and to reimburse and make good to the UNIVERSITY any loss,
+          damage, or cost the UNIVERSITY may have to pay as a result of my
+          participation in the program.
         </div>
         <div
           className={"chk" + (waiver ? " on" : "")}
@@ -443,11 +541,11 @@ export function Waiver({ ctx }) {
         <label>Request Message (Optional)</label>
         <textarea value={msg} onChange={(e) => setMsg(e.target.value)} />
         <button
-           className={`btn ${waiver ? "" : "grey"}`}
+          className={`btn ${waiver ? "" : "grey"}`}
           onClick={send}
           disabled={!waiver}
         >
-        Send Join Request
+          Send Join Request
         </button>
         {requestSent && (
         <div>
@@ -475,11 +573,13 @@ export function Calendar({ ctx }) {
   );
   return (
     <>
-      <TopBar title="Calendar" onBack={() => ctx.root("home")}/>
+      <TopBar title="Calendar" onBack={() => ctx.root("home")} />
       <Section title="Upcoming Games" />
       <div className="hs">
         <div className="game" style={{ width: "100%" }}>
-          <span className="chip">{g.g}</span>
+          <span className="chip" style={{ border: "none" }}>
+            {g.g}
+          </span>
           <div className="nm" style={{ lineHeight: 1.6 }}>
             {g.a} &nbsp;VS&nbsp; {g.b}
           </div>
@@ -557,7 +657,9 @@ export function Notifications({ ctx }) {
       return update ? [update, upcoming] : [upcoming];
     });
   const unread = items.filter((item) => !readNotifications.includes(item.id));
-  const shown = items.filter((item) => filter === "all" || item.type === filter);
+  const shown = items.filter(
+    (item) => filter === "all" || item.type === filter
+  );
   const markRead = (id) =>
     ctx.set({ readNotifications: [...new Set([...readNotifications, id])] });
 
@@ -583,8 +685,16 @@ export function Notifications({ ctx }) {
       <Pills
         items={[
           ["all", "All", items.length],
-          ["event", "Games", items.filter((item) => item.type === "event").length],
-          ["update", "Updates", items.filter((item) => item.type === "update").length],
+          [
+            "event",
+            "Games",
+            items.filter((item) => item.type === "event").length,
+          ],
+          [
+            "update",
+            "Updates",
+            items.filter((item) => item.type === "update").length,
+          ],
         ]}
         value={filter}
         onChange={setFilter}
@@ -602,7 +712,10 @@ export function Notifications({ ctx }) {
           >
             <span className="notif-top">
               <span className="notif-kind">
-                <Icon name={item.type === "update" ? "bell" : "cal"} size={13} />
+                <Icon
+                  name={item.type === "update" ? "bell" : "cal"}
+                  size={13}
+                />
                 {item.type === "update" ? "Game update" : "Upcoming game"}
               </span>
               <span>Oct {item.day}</span>
@@ -703,8 +816,14 @@ export function Help({ ctx }) {
         <div className="cardw">
           <div
             className="im"
-            style={{ background: "linear-gradient(120deg,#8a7a5a,#b0a080)" }}
+            style={{
+              backgroundImage: "url('/src/assets/searchforclub.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
           />
+
           <small>STEP 01</small>
           <b>Searching For Clubs</b>
           <i>Video Tutorial</i>
@@ -712,7 +831,12 @@ export function Help({ ctx }) {
         <div className="cardw">
           <div
             className="im"
-            style={{ background: "linear-gradient(120deg,#4f7a47,#2c3a2a)" }}
+            style={{
+              backgroundImage: "url('/src/assets/howintramurals.jpeg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
           />
           <small>STEP 02</small>
           <b>Finding Intramural Teams</b>

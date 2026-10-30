@@ -83,7 +83,7 @@ export default function App() {
 
   return (
     <div className="phone">
-      <div className="scroll" ref={scroller}>
+      <div className={"scroll" + (screen === "home" ? " home-scroll" : "")} ref={scroller}>
         {views[screen]}
       </div>
       {screen !== "help" && (

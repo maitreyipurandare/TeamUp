@@ -43,7 +43,12 @@ export function SearchBar({
   return (
     <div className="search">
       <Icon name="search" />
-      <input placeholder={placeholder} {...inputProps} />
+      <input
+        type="search"
+        aria-label={placeholder}
+        placeholder={placeholder}
+        {...inputProps}
+      />
       {filter && (
         <span className="f">
           <Icon name="sliders" />
@@ -100,7 +105,9 @@ export function GameStrip({ onOpen }) {
     <div className="hs">
       {games.map(([g, a, b, when, where]) => (
         <div className="game" key={g} onClick={onOpen}>
-          <span className="chip">{g}</span>
+          <span className="chip" style={{ border: "none" }}>
+            {g}
+          </span>
           <div className="nm">
             {a}
             <br />

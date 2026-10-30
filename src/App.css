@@ -66,6 +66,12 @@ h3 {
   padding: 16px 16px 100px;
   scrollbar-width: none;
 }
+.home-scroll {
+  padding-top: 56px;
+}
+.home-scroll > .top > .ib {
+  transform: translateY(-30px);
+}
 .scroll::-webkit-scrollbar {
   display: none;
 }
@@ -140,18 +146,23 @@ h3 {
 .search {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   background: #fff;
-  border-radius: 22px;
+  border: 2px solid var(--red);
+  border-radius: 16px;
   padding: 0 14px;
-  height: 44px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  margin-bottom: 16px;
+  min-height: 54px;
+  box-shadow: 0 3px 10px rgba(179, 13, 13, 0.12);
+  margin-bottom: 20px;
+}
+.search:focus-within {
+  outline: 3px solid var(--red);
+  outline-offset: 3px;
 }
 .search svg {
-  width: 16px;
-  height: 16px;
-  color: #555;
+  width: 20px;
+  height: 20px;
+  color: var(--red);
   flex: none;
 }
 .search input {
@@ -159,9 +170,14 @@ h3 {
   border: 0;
   outline: 0;
   background: none;
-  font: 14px Inter;
+  font: 500 16px Inter, system-ui, sans-serif;
   color: var(--ink);
   min-width: 0;
+  min-height: 50px;
+}
+.search input::placeholder {
+  color: #62504a;
+  opacity: 1;
 }
 .search .f {
   color: var(--red);
@@ -187,12 +203,16 @@ h3 {
   overflow: hidden;
 }
 .tile.a {
-  background: linear-gradient(rgba(30, 20, 10, 0.55), rgba(30, 20, 10, 0.65)),
-    linear-gradient(120deg, #8a7a5a, #4c5a3a 60%, #2a3a2a);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.78)),
+    url("./assets/college-soccer.jpg");
+  background-size: cover;
+  background-position: center 45%;
 }
 .tile.b {
-  background: linear-gradient(rgba(20, 20, 20, 0.55), rgba(20, 20, 20, 0.65)),
-    linear-gradient(120deg, #5b6b7b, #3a5a3a 60%, #2a4a2a);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.78)),
+    url("./assets/intramurals.jpg");
+  background-size: cover;
+  background-position: center;
 }
 .tile .ic {
   position: absolute;

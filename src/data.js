@@ -1,3 +1,8 @@
+import lacrosseImg from "./assets/lacrosse.jpeg";
+import rugbyImg from "./assets/rugby.jpeg";
+import soccerImg from "./assets/soccer.jpeg";
+import swimImg from "./assets/swim.jpeg";
+import tennisImg from "./assets/tennis.jpeg";
 export const CLUBS = [
   {
     n: "Lacrosse Club",
@@ -5,6 +10,7 @@ export const CLUBS = [
     d: "Men's and women's teams with weekly practices and conference matchups.",
     g: "Co-Ed",
     c: ["#6b7f9b", "#b86a45"],
+    image: lacrosseImg,
   },
   {
     n: "Rugby Club",
@@ -12,6 +18,7 @@ export const CLUBS = [
     d: "Full-contact and touch rugby. Weekly practice and regional tournament travel.",
     g: "Men's",
     c: ["#4d5f47", "#2c3a2a"],
+    image: rugbyImg,
   },
   {
     n: "Soccer Club",
@@ -19,6 +26,7 @@ export const CLUBS = [
     d: "Mabel Lee Field",
     g: "Co-Ed",
     c: ["#4f7a47", "#b34a3d"],
+    image: soccerImg,
   },
   {
     n: "Swim Club",
@@ -26,6 +34,7 @@ export const CLUBS = [
     d: "Lap swimming, relay races, and open-water training sessions year-round.",
     g: "Co-Ed",
     c: ["#2f7fa8", "#9ec7da"],
+    image: swimImg,
   },
   {
     n: "Tennis Club",
@@ -33,6 +42,7 @@ export const CLUBS = [
     d: "Casual and competitive tennis on the UNL courts.",
     g: "Co-Ed",
     c: ["#6a8a4a", "#c9d0b0"],
+    image: tennisImg,
   },
 ];
 
@@ -229,6 +239,10 @@ export const FAQ = [
   [
     "How do I sign up for intramurals?",
     'Open "Intramurals" from the home feed, pick a sport and division, then tap Join and complete the waiver.',
+  ],
+  [
+    "What is the difference between clubs and intramurals?",
+    "Sports clubs are student-run organizations that focus on a specific sport. They typically offer regular practices, organized teams, and opportunities to compete against other universities. They often require a greater time commitment. Intramurals are recreational sports leagues and tournaments where students compete against other students or teams within the university. They are generally more casual, require less commitment, and are a great way to have fun and stay active.",
   ],
   [
     "Where can I see my upcoming games?",
