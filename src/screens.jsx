@@ -356,7 +356,7 @@ export function Waiver({ ctx }) {
   const { waiver, team, detail } = ctx.S;
 
   const send = () => {
-    if (!waiver) return ctx.toast("Please accept the waiver first");
+    //if (!waiver) return ctx.toast("Please accept the waiver first");
     ctx.toast("Join request sent!");
     setTimeout(() => ctx.root("home"), 900);
   };
@@ -435,8 +435,12 @@ export function Waiver({ ctx }) {
       <div className="form">
         <label>Request Message (Optional)</label>
         <textarea value={msg} onChange={(e) => setMsg(e.target.value)} />
-        <button className="btn" onClick={send}>
-          Send Join Request
+        <button
+           className={`btn ${waiver ? "" : "grey"}`}
+          onClick={send}
+          disabled={!waiver}
+        >
+        Send Join Request
         </button>
       </div>
     </>

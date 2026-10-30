@@ -427,6 +427,11 @@ h3 {
   margin-right: 5px;
   vertical-align: middle;
 }
+.btn:disabled {
+  background-color: grey;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
 .dot.cl:before {
   background: #444;
 }
