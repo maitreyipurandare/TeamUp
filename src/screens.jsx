@@ -321,7 +321,9 @@ export function Detail({ ctx }) {
           className="img"
           style={{
             height: 120,
-            background: `linear-gradient(120deg,${d.colors[0]},${d.colors[1]})`,
+            background: d.image
+              ? `url("${d.image}") center / cover no-repeat`
+              : `linear-gradient(120deg,${d.colors[0]},${d.colors[1]})`,
           }}
         />
         <div className="bd">
