@@ -236,6 +236,10 @@ export const FAQ = [
     'Open "Intramurals" from the home feed, pick a sport and division, then tap Join and complete the waiver.',
   ],
   [
+    "What is the difference between clubs and intramurals?",
+    "Sports clubs are student-run organizations that focus on a specific sport. They typically offer regular practices, organized teams, and opportunities to compete against other universities. They often require a greater time commitment. Intramurals are recreational sports leagues and tournaments where students compete against other students or teams within the university. They are generally more casual, require less commitment, and are a great way to have fun and stay active.",
+  ],
+  [
     "Where can I see my upcoming games?",
     "Tap the calendar tab. Games appear on the calendar and in the Upcoming Games strip.",
   ],

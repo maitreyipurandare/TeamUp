@@ -532,11 +532,11 @@ export function Waiver({ ctx }) {
         <label>Request Message (Optional)</label>
         <textarea value={msg} onChange={(e) => setMsg(e.target.value)} />
         <button
-           className={`btn ${waiver ? "" : "grey"}`}
+          className={`btn ${waiver ? "" : "grey"}`}
           onClick={send}
           disabled={!waiver}
         >
-        Send Join Request
+          Send Join Request
         </button>
       </div>
     </>
@@ -801,8 +801,14 @@ export function Help({ ctx }) {
         <div className="cardw">
           <div
             className="im"
-            style={{ background: "linear-gradient(120deg,#8a7a5a,#b0a080)" }}
+            style={{
+              backgroundImage: "url('/src/assets/searchforclub.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
           />
+
           <small>STEP 01</small>
           <b>Searching For Clubs</b>
           <i>Video Tutorial</i>
@@ -810,7 +816,12 @@ export function Help({ ctx }) {
         <div className="cardw">
           <div
             className="im"
-            style={{ background: "linear-gradient(120deg,#4f7a47,#2c3a2a)" }}
+            style={{
+              backgroundImage: "url('/src/assets/howintramurals.jpeg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
           />
           <small>STEP 02</small>
           <b>Finding Intramural Teams</b>
