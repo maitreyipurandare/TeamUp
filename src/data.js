@@ -172,15 +172,53 @@ export const EVENTS = {
     b: "Theta Chi",
     d: "Oct 20 · 5:00 PM",
     p: "Lower Field B",
+    update: {
+      title: "Field change",
+      message: "This game has moved to Lower Field B.",
+    },
   },
   23: {
     label: "Al...",
     g: "Flag Football",
     a: "Alpha Chi Omega",
     b: "Sigma Nu",
-    d: "Oct 23 · 4:30 PM",
+    d: "Oct 23 · 5:00 PM",
     p: "Lower Field A",
+    update: {
+      title: "Kickoff time changed",
+      message: "Kickoff moved from 4:30 PM to 5:00 PM.",
+    },
   },
+};
+
+export const PROFILE = {
+  fullName: "Jane Doe",
+  email: "jane.doe@huskers.unl.edu",
+  preferredName: "Jane",
+  pronouns: "She / her",
+  teams: [
+    { name: "Flag Football", detail: "Alpha Chi Omega" },
+    { name: "Volleyball Club", detail: "Vice President" },
+    { name: "Broomball", detail: "Member" },
+  ],
+  playedGames: [
+    {
+      day: 14,
+      sport: "Flag Football",
+      matchup: "Alpha Chi Omega vs Delta Upsilon",
+      date: "Oct 14",
+      score: "21 - 14",
+      result: "Win",
+    },
+    {
+      day: 1,
+      sport: "Volleyball",
+      matchup: "Spike Tysons vs Block Busters",
+      date: "Oct 1",
+      score: "2 - 1",
+      result: "Win",
+    },
+  ],
 };
 
 export const FAQ = [

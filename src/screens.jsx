@@ -8,7 +8,7 @@ import {
   Section,
   GameStrip,
 } from "./ui.jsx";
-import { CLUBS, INTRA, SEARCH, TEAMS, EVENTS, FAQ } from "./data.js";
+import { CLUBS, INTRA, SEARCH, TEAMS, EVENTS, FAQ, PROFILE } from "./data.js";
 import { searchAll } from "./search.js";
 import { clubDetail, clubFromResult, teamDetail } from "./detail.js";
 
@@ -513,6 +513,168 @@ export function Calendar({ ctx }) {
             ))}
           </tbody>
         </table>
+      </div>
+    </>
+  );
+}
+
+export function Notifications({ ctx }) {
+  const { readNotifications = [] } = ctx.S;
+  const [filter, setFilter] = useState("all");
+  const items = Object.entries(EVENTS)
+    .filter(([day]) => Number(day) > 14)
+    .flatMap(([day, event]) => {
+      const date = Number(day);
+      const upcoming = {
+        id: `event-${day}`,
+        type: "event",
+        day: date,
+        event,
+        title: `${event.g} game scheduled`,
+        message: `${event.a} vs ${event.b}`,
+      };
+      const update = event.update && {
+        id: `update-${day}`,
+        type: "update",
+        day: date,
+        event,
+        title: event.update.title,
+        message: event.update.message,
+      };
+      return update ? [update, upcoming] : [upcoming];
+    });
+  const unread = items.filter((item) => !readNotifications.includes(item.id));
+  const shown = items.filter((item) => filter === "all" || item.type === filter);
+  const markRead = (id) =>
+    ctx.set({ readNotifications: [...new Set([...readNotifications, id])] });
+
+  return (
+    <>
+      <TopBar title="Notifications" onBack={() => ctx.root("home")} />
+      <Section
+        title="Your updates"
+        right={
+          unread.length > 0 && (
+            <a
+              onClick={() =>
+                ctx.set({
+                  readNotifications: items.map((item) => item.id),
+                })
+              }
+            >
+              Mark all read
+            </a>
+          )
+        }
+      />
+      <Pills
+        items={[
+          ["all", "All", items.length],
+          ["event", "Games", items.filter((item) => item.type === "event").length],
+          ["update", "Updates", items.filter((item) => item.type === "update").length],
+        ]}
+        value={filter}
+        onChange={setFilter}
+      />
+      {shown.map((item) => {
+        const isRead = readNotifications.includes(item.id);
+        return (
+          <button
+            className={`notif${isRead ? "" : " unread"}`}
+            key={item.id}
+            onClick={() => {
+              markRead(item.id);
+              ctx.root("calendar", { sel: item.day });
+            }}
+          >
+            <span className="notif-top">
+              <span className="notif-kind">
+                <Icon name={item.type === "update" ? "bell" : "cal"} size={13} />
+                {item.type === "update" ? "Game update" : "Upcoming game"}
+              </span>
+              <span>Oct {item.day}</span>
+            </span>
+            <strong>{item.title}</strong>
+            <span className="notif-message">{item.message}</span>
+            <span className="notif-meta">
+              <Icon name="cal" size={11} /> {item.event.d}
+              <span>·</span>
+              <Icon name="pin" size={11} /> {item.event.p}
+            </span>
+          </button>
+        );
+      })}
+      {!shown.length && <div className="empty">No updates in this filter.</div>}
+    </>
+  );
+}
+
+export function Profile({ ctx }) {
+  return (
+    <>
+      <TopBar title="Profile" onBack={() => ctx.root("home")} />
+      <div className="profile-head">
+        <div className="profile-avatar" aria-label="Generic profile picture">
+          <Icon name="user" size={42} />
+        </div>
+        <div className="profile-heading">
+          <h2>{PROFILE.fullName}</h2>
+          <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+        </div>
+      </div>
+
+      <Section title="About" />
+      <div className="info profile-info">
+        <div className="irow">
+          <span>Preferred name</span>
+          <b>{PROFILE.preferredName}</b>
+        </div>
+        <div className="irow">
+          <span>Pronouns</span>
+          <b>{PROFILE.pronouns}</b>
+        </div>
+      </div>
+
+      <Section title="My Teams" right={<em>{PROFILE.teams.length} TEAMS</em>} />
+      <div className="profile-list">
+        {PROFILE.teams.map((team) => (
+          <div className="profile-team" key={team.name}>
+            <span className="profile-team-icon">
+              <Icon name="users" size={16} />
+            </span>
+            <span className="profile-team-copy">
+              <b>{team.name}</b>
+              <small>{team.detail}</small>
+            </span>
+          </div>
+        ))}
+      </div>
+      <button
+        className="profile-join-link"
+        onClick={() => ctx.go("intra", { gender: "All" })}
+      >
+        Join more <Icon name="chev" size={13} />
+      </button>
+
+      <Section title="Played Games" />
+      <div className="profile-list profile-games">
+        {PROFILE.playedGames.map((game) => (
+          <button
+            className="profile-game"
+            key={`${game.sport}-${game.day}`}
+            onClick={() => ctx.root("calendar", { sel: game.day })}
+          >
+            <span className="profile-game-date">{game.date}</span>
+            <span className="profile-game-copy">
+              <b>{game.matchup}</b>
+              <small>{game.sport}</small>
+            </span>
+            <span className="profile-game-score">
+              <b>{game.score}</b>
+              <small>{game.result}</small>
+            </span>
+          </button>
+        ))}
       </div>
     </>
   );
