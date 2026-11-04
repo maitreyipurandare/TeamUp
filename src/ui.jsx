@@ -36,7 +36,7 @@ export function BrandBar({ onBack, onHelp, onGear }) {
 }
 
 export function SearchBar({
-  placeholder = "Search clubs, intramurals, events...",
+  placeholder = "Search club and intramurals...",
   filter = true,
   ...inputProps
 }) {
