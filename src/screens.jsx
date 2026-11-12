@@ -572,49 +572,119 @@ export function Waiver({ ctx }) {
 export function Calendar({ ctx }) {
   const { sel } = ctx.S;
 
-  // Start in October 2026 to match your existing events
-  const [currentMonth, setCurrentMonth] = useState(new Date(2026, 9, 1));
+  const [view, setView] = useState("month");
+  const [currentDate, setCurrentDate] = useState(new Date(2026, 9, sel || 14));
 
-  const year = currentMonth.getFullYear();
-  const month = currentMonth.getMonth();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
 
-  const monthLabel = currentMonth.toLocaleDateString("en-US", {
-    month: "long",
-    year: "numeric",
-  });
+  const selectedDate = sel ? new Date(year, month, sel) : null;
 
-  const changeMonth = (offset) => {
-    setCurrentMonth(new Date(year, month + offset, 1));
-    ctx.set({ sel: null });
+  const formatDate = (date, options) =>
+    date.toLocaleDateString("en-US", options);
+
+  const selectDate = (date) => {
+    setCurrentDate(
+      new Date(date.getFullYear(), date.getMonth(), date.getDate())
+    );
+    ctx.set({ sel: date.getDate() });
   };
 
-  // Generate calendar dates dynamically
+  const changePeriod = (offset) => {
+    const next = new Date(currentDate);
+
+    if (view === "month") {
+      next.setDate(1);
+      next.setMonth(next.getMonth() + offset);
+      setCurrentDate(next);
+      ctx.set({ sel: null });
+    } else {
+      next.setDate(next.getDate() + (view === "week" ? offset * 7 : offset));
+      selectDate(next);
+    }
+  };
+
+  const getGamesForDate = (date) => {
+    if (date.getFullYear() !== 2026 || date.getMonth() !== 9) {
+      return [];
+    }
+
+    const day = date.getDate();
+
+    return [EVENTS[day], EXTRA_GAMES[day]].filter(Boolean);
+  };
+
+  const games = selectedDate ? getGamesForDate(selectedDate) : [];
+
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const daysInPrevMonth = new Date(year, month, 0).getDate();
 
-  const days = Array.from({ length: 42 }, (_, i) => {
-    const day = i - firstDay + 1;
+  const monthDays = Array.from({ length: 42 }, (_, i) => {
+    const date = new Date(year, month, i - firstDay + 1);
 
-    if (day < 1) {
-      return { d: daysInPrevMonth + day, other: true };
-    }
-
-    if (day > daysInMonth) {
-      return { d: day - daysInMonth, other: true };
-    }
-
-    return { d: day, other: false };
+    return {
+      date,
+      other: date.getMonth() !== month,
+    };
   });
 
-  const weeks = Array.from({ length: 6 }, (_, r) =>
-    days.slice(r * 7, r * 7 + 7)
+  const monthWeeks = Array.from({ length: 6 }, (_, i) =>
+    monthDays.slice(i * 7, i * 7 + 7)
   );
 
-  // Existing events are for October 2026
-  const isEventMonth = year === 2026 && month === 9;
-  const games =
-    isEventMonth && sel ? [EVENTS[sel], EXTRA_GAMES[sel]].filter(Boolean) : [];
+  const weekStart = new Date(currentDate);
+  weekStart.setDate(currentDate.getDate() - currentDate.getDay());
+
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const date = new Date(weekStart);
+    date.setDate(weekStart.getDate() + i);
+    return date;
+  });
+
+  const isSelected = (date) =>
+    selectedDate &&
+    date.getFullYear() === selectedDate.getFullYear() &&
+    date.getMonth() === selectedDate.getMonth() &&
+    date.getDate() === selectedDate.getDate();
+
+  const renderEventIcons = (date) => (
+    <div className="calendar-event-icons">
+      {getGamesForDate(date).map((game, index) => (
+        <span
+          key={index}
+          className={`ev-icon ${
+            game.type === "club" ? "club-event" : "intramural"
+          }`}
+          title={`${game.g} (${
+            game.type === "club" ? "Sports Club" : "Intramural"
+          })`}
+        >
+          <Icon name={game.type === "club" ? "users" : "trophy"} size={14} />
+        </span>
+      ))}
+    </div>
+  );
+
+  const periodLabel =
+    view === "month"
+      ? formatDate(currentDate, {
+          month: "long",
+          year: "numeric",
+        })
+      : view === "week"
+      ? `${formatDate(weekDays[0], {
+          month: "short",
+          day: "numeric",
+        })} – ${formatDate(weekDays[6], {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })}`
+      : formatDate(currentDate, {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        });
 
   return (
     <>
@@ -622,100 +692,143 @@ export function Calendar({ ctx }) {
         <TopBar title="Calendar" onBack={() => ctx.root("home")} />
       </div>
 
+      {/* Navigation */}
       <div className="month-nav">
         <button
           type="button"
-          onClick={() => changeMonth(-1)}
-          aria-label="Previous month"
+          onClick={() => changePeriod(-1)}
+          aria-label={`Previous ${view}`}
         >
           ‹
         </button>
 
-        <h3>{monthLabel}</h3>
+        <h3>{periodLabel}</h3>
 
         <button
           type="button"
-          onClick={() => changeMonth(1)}
-          aria-label="Next month"
+          onClick={() => changePeriod(1)}
+          aria-label={`Next ${view}`}
         >
           ›
         </button>
       </div>
 
-      <div className="cal">
-        <table>
-          <thead>
-            <tr>
-              {"SUN MON TUE WED THU FRI SAT".split(" ").map((d) => (
-                <th key={d}>{d}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {weeks.map((w, r) => (
-              <tr key={r}>
-                {w.map(({ d, other }, i) => {
-                  const dayGames =
-                    !other && isEventMonth
-                      ? [EVENTS[d], EXTRA_GAMES[d]].filter(Boolean)
-                      : [];
-
-                  const cls = [
-                    other && "o",
-                    !other && isEventMonth && d === 14 && "t",
-                    !other && sel === d && "sel",
-                  ]
-                    .filter(Boolean)
-                    .join(" ");
-
-                  return (
-                    <td
-                      key={`${r}-${i}`}
-                      className={cls}
-                      onClick={() => {
-                        if (!other) ctx.set({ sel: d });
-                      }}
-                    >
-                      {!other && isEventMonth && d === 14 ? <u>{d}</u> : d}
-
-                      <div className="calendar-event-icons">
-                        {dayGames.map((game, index) => (
-                          <span
-                            className={`ev-icon ${
-                              game.type === "club" ? "club-event" : "intramural"
-                            }`}
-                            key={index}
-                            title={`${game.g} (${
-                              game.type === "club" ? "Club" : "Intramural"
-                            })`}
-                          >
-                            <Icon
-                              name={game.type === "club" ? "users" : "trophy"}
-                              size={14}
-                            />
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* View buttons - the ONLY way to change views */}
+      <div className="calendar-view-toggle">
+        {["month", "week", "day"].map((option) => (
+          <button
+            key={option}
+            type="button"
+            className={view === option ? "active" : ""}
+            onClick={() => {
+              if (option !== "month" && !sel) {
+                ctx.set({ sel: currentDate.getDate() });
+              }
+              setView(option);
+            }}
+          >
+            {option.charAt(0).toUpperCase() + option.slice(1)}
+          </button>
+        ))}
       </div>
 
+      {/* MONTH VIEW */}
+      {view === "month" && (
+        <div className="cal">
+          <table>
+            <thead>
+              <tr>
+                {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(
+                  (day) => (
+                    <th key={day}>{day}</th>
+                  )
+                )}
+              </tr>
+            </thead>
+
+            <tbody>
+              {monthWeeks.map((week, row) => (
+                <tr key={row}>
+                  {week.map(({ date, other }, i) => (
+                    <td
+                      key={i}
+                      className={[other && "o", isSelected(date) && "sel"]
+                        .filter(Boolean)
+                        .join(" ")}
+                      onClick={() => {
+                        if (!other) selectDate(date);
+                      }}
+                    >
+                      {date.getDate()}
+                      {!other && renderEventIcons(date)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* WEEK VIEW */}
+      {view === "week" && (
+        <div className="calendar-week">
+          {weekDays.map((date) => (
+            <button
+              type="button"
+              key={`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`}
+              className={`calendar-week-day ${
+                isSelected(date) ? "selected" : ""
+              }`}
+              onClick={() => selectDate(date)}
+            >
+              <small>{formatDate(date, { weekday: "short" })}</small>
+
+              <b>{date.getDate()}</b>
+
+              {renderEventIcons(date)}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* DAY VIEW */}
+      {view === "day" && (
+        <div className="calendar-day">
+          <h3>
+            {formatDate(currentDate, {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+            })}
+          </h3>
+
+          <div className="calendar-day-summary">
+            {renderEventIcons(currentDate)}
+
+            <span>
+              {getGamesForDate(currentDate).length === 0
+                ? "No events scheduled"
+                : `${getGamesForDate(currentDate).length} event(s) scheduled`}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Legend */}
       <div className="calendar-legend">
         <span>
           <Icon name="trophy" size={14} />
           Intramural
         </span>
+
         <span>
           <Icon name="users" size={14} />
           Sports Club
         </span>
       </div>
 
+      {/* Upcoming Games */}
       <div style={{ marginTop: "32px" }}>
         <Section title="Upcoming Games" />
       </div>
@@ -723,7 +836,11 @@ export function Calendar({ ctx }) {
       {games.length > 0 && (
         <div
           className="hs"
-          style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          }}
         >
           {games.map((game, index) => (
             <div className="game" style={{ width: "100%" }} key={index}>
@@ -732,13 +849,7 @@ export function Calendar({ ctx }) {
               </span>
 
               <div className="nm" style={{ lineHeight: 1.6 }}>
-                {game.b ? (
-                  <>
-                    {game.a} &nbsp;VS&nbsp; {game.b}
-                  </>
-                ) : (
-                  game.a
-                )}
+                {game.b ? `${game.a} VS ${game.b}` : game.a}
               </div>
 
               <div className="meta">
