@@ -162,23 +162,34 @@ export const EVENTS = {
   1: {
     label: "S...",
     g: "Volleyball",
-    a: "Spike Tysons",
-    b: "Block Busters",
+    a: "Nebraska",
+    b: "Michigan State",
     d: "Oct 1 · 6:30 PM",
-    p: "Gym Court B",
+    p: "Home",
+    type: "club",
   },
   14: {
-    label: "D...",
+    label: "Al...",
     g: "Flag Football",
     a: "Alpha Chi Omega",
-    b: "Delta Upsilon",
+    b: "Sigma Nu",
     d: "Oct 14 · 4:00 PM",
     p: "Lower Field A",
+    type: "intramural",
+  },
+  16: {
+    label: "Al...",
+    g: "Volleyball",
+    a: "Nebraska",
+    b: "Colorado",
+    d: "Oct 16 · 5:00 PM",
+    p: "Home",
+    type: "club",
   },
   20: {
-    label: "D...",
+    label: "Al...",
     g: "Flag Football",
-    a: "Delta Upsilon",
+    a: "Alpha Chi Omega",
     b: "Theta Chi",
     d: "Oct 20 · 5:00 PM",
     p: "Lower Field B",
@@ -186,18 +197,41 @@ export const EVENTS = {
       title: "Field change",
       message: "This game has moved to Lower Field B.",
     },
+    type: "intramural",
   },
   23: {
     label: "Al...",
     g: "Flag Football",
     a: "Alpha Chi Omega",
-    b: "Sigma Nu",
+    b: "Delta Upsilon",
     d: "Oct 23 · 5:00 PM",
     p: "Lower Field A",
     update: {
       title: "Kickoff time changed",
       message: "Kickoff moved from 4:30 PM to 5:00 PM.",
     },
+    type: "intramural",
+  },
+};
+
+export const EXTRA_GAMES = {
+  14: {
+    g: "Broomball",
+    a: "Practice",
+    b: "",
+    d: "Oct 14 · 7:00 PM",
+    p: "Breslow Ice Hockey Rink",
+    label: "Br...",
+    type: "club",
+  },
+  23: {
+    g: "Volleyball",
+    a: "Nebraska",
+    b: "Iowa",
+    d: "Oct 23 · 7:00 PM",
+    p: "University of Iowa",
+    label: "Neb...",
+    type: "club",
   },
 };
 
@@ -206,11 +240,25 @@ export const PROFILE = {
   email: "jane.doe@huskers.unl.edu",
   preferredName: "Jane",
   pronouns: "She / her",
+
   teams: [
-    { name: "Flag Football", detail: "Alpha Chi Omega" },
-    { name: "Volleyball Club", detail: "Vice President" },
-    { name: "Broomball", detail: "Member" },
+    {
+      name: "Flag Football",
+      detail: "Alpha Chi Omega",
+      type: "intramural",
+    },
+    {
+      name: "Volleyball Club",
+      detail: "Vice President",
+      type: "club",
+    },
+    {
+      name: "Broomball",
+      detail: "Member",
+      type: "club",
+    },
   ],
+
   playedGames: [
     {
       day: 14,
@@ -223,10 +271,18 @@ export const PROFILE = {
     {
       day: 1,
       sport: "Volleyball",
-      matchup: "Spike Tysons vs Block Busters",
+      matchup: "Nebraska vs Michigan State",
       date: "Oct 1",
       score: "2 - 1",
       result: "Win",
+    },
+    {
+      day: 1,
+      sport: "Volleyball",
+      matchup: "Nebraska vs KU",
+      date: "Sept 28",
+      score: "1 - 2",
+      result: "Loss",
     },
   ],
 };
@@ -242,7 +298,7 @@ export const FAQ = [
   ],
   [
     "What is the difference between clubs and intramurals?",
-    "Sports clubs are student-run organizations that focus on a specific sport. They typically offer regular practices, organized teams, and opportunities to compete against other universities. They often require a greater time commitment. Intramurals are recreational sports leagues and tournaments where students compete against other students or teams within the university. They are generally more casual, require less commitment, and are a great way to have fun and stay active.",
+    "Sports clubs are student-run organizations that focus on a specific sport. They typically offer regular practices, organized teams, and opportunities to compete against other universities. Intramurals are recreational sports leagues and tournaments where students compete against other student teams within the university.",
   ],
   [
     "Where can I see my upcoming games?",

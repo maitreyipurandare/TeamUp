@@ -93,13 +93,7 @@ export function GameStrip({ onOpen }) {
       "Today · 4:00 PM",
       "Lower Field A",
     ],
-    [
-      "Volleyball",
-      "Spike Tysons",
-      "Block Busters",
-      "Oct 6 · 5:00 PM",
-      "City Rec Court 1",
-    ],
+    ["Volleyball", "Nebraska", "Colorado", "Oct 16 · 5:00 PM", "Home"],
   ];
   return (
     <div className="hs">

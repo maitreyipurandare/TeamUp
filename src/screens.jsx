@@ -8,7 +8,16 @@ import {
   Section,
   GameStrip,
 } from "./ui.jsx";
-import { CLUBS, INTRA, SEARCH, TEAMS, EVENTS, FAQ, PROFILE } from "./data.js";
+import {
+  CLUBS,
+  INTRA,
+  SEARCH,
+  TEAMS,
+  EVENTS,
+  EXTRA_GAMES,
+  FAQ,
+  PROFILE,
+} from "./data.js";
 import { searchAll } from "./search.js";
 import { clubDetail, clubFromResult, teamDetail } from "./detail.js";
 
@@ -370,10 +379,10 @@ export function Waiver({ ctx }) {
     //setTimeout(() => ctx.root("home"), 900);
   };
   function undo() {
-  // Reverse the join request here
-  setRequestSent(false);
-  ctx.toast("Join request undone!");
-}
+    // Reverse the join request here
+    setRequestSent(false);
+    ctx.toast("Join request undone!");
+  }
   return (
     <>
       <div className="top">
@@ -548,11 +557,13 @@ export function Waiver({ ctx }) {
           Send Join Request
         </button>
         {requestSent && (
-        <div>
-          Join request sent!
-          <button type="button" onClick={undo}>Undo</button>
-        </div>
-)}
+          <div>
+            Join request sent!
+            <button type="button" onClick={undo}>
+              Undo
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
@@ -560,36 +571,77 @@ export function Waiver({ ctx }) {
 
 export function Calendar({ ctx }) {
   const { sel } = ctx.S;
-  const g = (sel && EVENTS[sel]) || {
-    g: "Flag Football",
-    a: "Alpha Chi Omega",
-    b: "Delta Upsilon",
-    d: "Today · 4:00 PM",
-    p: "Lower Field A",
+
+  // Start in October 2026 to match your existing events
+  const [currentMonth, setCurrentMonth] = useState(new Date(2026, 9, 1));
+
+  const year = currentMonth.getFullYear();
+  const month = currentMonth.getMonth();
+
+  const monthLabel = currentMonth.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
+  const changeMonth = (offset) => {
+    setCurrentMonth(new Date(year, month + offset, 1));
+    ctx.set({ sel: null });
   };
-  const days = [27, 28, 29, 30, ...Array.from({ length: 31 }, (_, i) => i + 1)];
-  const weeks = Array.from({ length: 5 }, (_, r) =>
-    days.slice(r * 7, r * 7 + 7).map((d, i) => ({ d, other: r * 7 + i < 4 }))
+
+  // Generate calendar dates dynamically
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+  const days = Array.from({ length: 42 }, (_, i) => {
+    const day = i - firstDay + 1;
+
+    if (day < 1) {
+      return { d: daysInPrevMonth + day, other: true };
+    }
+
+    if (day > daysInMonth) {
+      return { d: day - daysInMonth, other: true };
+    }
+
+    return { d: day, other: false };
+  });
+
+  const weeks = Array.from({ length: 6 }, (_, r) =>
+    days.slice(r * 7, r * 7 + 7)
   );
+
+  // Existing events are for October 2026
+  const isEventMonth = year === 2026 && month === 9;
+  const games =
+    isEventMonth && sel ? [EVENTS[sel], EXTRA_GAMES[sel]].filter(Boolean) : [];
+
   return (
     <>
-      <TopBar title="Calendar" onBack={() => ctx.root("home")} />
-      <Section title="Upcoming Games" />
-      <div className="hs">
-        <div className="game" style={{ width: "100%" }}>
-          <span className="chip" style={{ border: "none" }}>
-            {g.g}
-          </span>
-          <div className="nm" style={{ lineHeight: 1.6 }}>
-            {g.a} &nbsp;VS&nbsp; {g.b}
-          </div>
-          <div className="meta">
-            <Icon name="cal" size={11} /> {g.d}
-            <br />
-            <Icon name="pin" size={11} /> {g.p}
-          </div>
-        </div>
+      <div style={{ paddingTop: "24px" }}>
+        <TopBar title="Calendar" onBack={() => ctx.root("home")} />
       </div>
+
+      <div className="month-nav">
+        <button
+          type="button"
+          onClick={() => changeMonth(-1)}
+          aria-label="Previous month"
+        >
+          ‹
+        </button>
+
+        <h3>{monthLabel}</h3>
+
+        <button
+          type="button"
+          onClick={() => changeMonth(1)}
+          aria-label="Next month"
+        >
+          ›
+        </button>
+      </div>
+
       <div className="cal">
         <table>
           <thead>
@@ -602,23 +654,48 @@ export function Calendar({ ctx }) {
           <tbody>
             {weeks.map((w, r) => (
               <tr key={r}>
-                {w.map(({ d, other }) => {
-                  const ev = !other && EVENTS[d];
+                {w.map(({ d, other }, i) => {
+                  const dayGames =
+                    !other && isEventMonth
+                      ? [EVENTS[d], EXTRA_GAMES[d]].filter(Boolean)
+                      : [];
+
                   const cls = [
                     other && "o",
-                    !other && d === 14 && "t",
+                    !other && isEventMonth && d === 14 && "t",
                     !other && sel === d && "sel",
                   ]
                     .filter(Boolean)
                     .join(" ");
+
                   return (
                     <td
-                      key={r + "-" + d}
+                      key={`${r}-${i}`}
                       className={cls}
-                      onClick={() => !other && ctx.set({ sel: d })}
+                      onClick={() => {
+                        if (!other) ctx.set({ sel: d });
+                      }}
                     >
-                      {!other && d === 14 ? <u>{d}</u> : d}
-                      {ev && <span className="ev">{ev.label}</span>}
+                      {!other && isEventMonth && d === 14 ? <u>{d}</u> : d}
+
+                      <div className="calendar-event-icons">
+                        {dayGames.map((game, index) => (
+                          <span
+                            className={`ev-icon ${
+                              game.type === "club" ? "club-event" : "intramural"
+                            }`}
+                            key={index}
+                            title={`${game.g} (${
+                              game.type === "club" ? "Club" : "Intramural"
+                            })`}
+                          >
+                            <Icon
+                              name={game.type === "club" ? "users" : "trophy"}
+                              size={14}
+                            />
+                          </span>
+                        ))}
+                      </div>
                     </td>
                   );
                 })}
@@ -627,6 +704,52 @@ export function Calendar({ ctx }) {
           </tbody>
         </table>
       </div>
+
+      <div className="calendar-legend">
+        <span>
+          <Icon name="trophy" size={14} />
+          Intramural
+        </span>
+        <span>
+          <Icon name="users" size={14} />
+          Sports Club
+        </span>
+      </div>
+
+      <div style={{ marginTop: "32px" }}>
+        <Section title="Upcoming Games" />
+      </div>
+
+      {games.length > 0 && (
+        <div
+          className="hs"
+          style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+        >
+          {games.map((game, index) => (
+            <div className="game" style={{ width: "100%" }} key={index}>
+              <span className="chip" style={{ border: "none" }}>
+                {game.g}
+              </span>
+
+              <div className="nm" style={{ lineHeight: 1.6 }}>
+                {game.b ? (
+                  <>
+                    {game.a} &nbsp;VS&nbsp; {game.b}
+                  </>
+                ) : (
+                  game.a
+                )}
+              </div>
+
+              <div className="meta">
+                <Icon name="cal" size={11} /> {game.d}
+                <br />
+                <Icon name="pin" size={11} /> {game.p}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }
@@ -740,9 +863,10 @@ export function Profile({ ctx }) {
     <>
       <TopBar title="Profile" onBack={() => ctx.root("home")} />
       <div className="profile-head">
-        <div className="profile-avatar" aria-label="Generic profile picture">
-          <Icon name="user" size={42} />
+        <div className="profile-avatar">
+          <Icon name="user" size={40} />
         </div>
+
         <div className="profile-heading">
           <h2>{PROFILE.fullName}</h2>
           <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
@@ -762,12 +886,21 @@ export function Profile({ ctx }) {
       </div>
 
       <Section title="My Teams" right={<em>{PROFILE.teams.length} TEAMS</em>} />
+
       <div className="profile-list">
         {PROFILE.teams.map((team) => (
           <div className="profile-team" key={team.name}>
-            <span className="profile-team-icon">
-              <Icon name="users" size={16} />
+            <span
+              className={`profile-team-icon ${
+                team.type === "club" ? "club-event" : "intramural"
+              }`}
+            >
+              <Icon
+                name={team.type === "club" ? "users" : "trophy"}
+                size={20}
+              />
             </span>
+
             <span className="profile-team-copy">
               <b>{team.name}</b>
               <small>{team.detail}</small>
@@ -775,12 +908,6 @@ export function Profile({ ctx }) {
           </div>
         ))}
       </div>
-      <button
-        className="profile-join-link"
-        onClick={() => ctx.go("intra", { gender: "All" })}
-      >
-        Join more <Icon name="chev" size={13} />
-      </button>
 
       <Section title="Played Games" />
       <div className="profile-list profile-games">
