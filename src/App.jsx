@@ -48,10 +48,20 @@ export default function App() {
       if (patch) setS((s) => ({ ...s, ...patch }));
       setStack([name]);
     },
+
     toast: (msg) => {
-      setToastMsg(msg);
+      const notification = typeof msg === "string" ? { message: msg } : msg;
+
+      setToastMsg(notification);
+
       clearTimeout(timer.current);
-      timer.current = setTimeout(() => setToastMsg(""), 1800);
+
+      timer.current = setTimeout(
+        () => {
+          setToastMsg("");
+        },
+        notification.action ? 5000 : 1800
+      );
     },
   };
 
@@ -83,7 +93,10 @@ export default function App() {
 
   return (
     <div className="phone">
-      <div className={"scroll" + (screen === "home" ? " home-scroll" : "")} ref={scroller}>
+      <div
+        className={"scroll" + (screen === "home" ? " home-scroll" : "")}
+        ref={scroller}
+      >
         {views[screen]}
       </div>
       {screen !== "help" && (
@@ -102,7 +115,25 @@ export default function App() {
           ))}
         </nav>
       )}
-      <div className={"toast" + (toastMsg ? " show" : "")}>{toastMsg}</div>
+
+      {toastMsg && (
+        <div className="toast">
+          <span>{toastMsg.message}</span>
+
+          {toastMsg.action && (
+            <button
+              type="button"
+              className="toast-undo"
+              onClick={() => {
+                clearTimeout(timer.current);
+                toastMsg.action.onClick();
+              }}
+            >
+              {toastMsg.action.label}
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
