@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import Icon from "./Icon.jsx";
+import { PROFILE } from "./data.js";
 import {
   Home,
   Clubs,
@@ -26,6 +27,8 @@ export default function App() {
     sel: null,
     faq: 0,
     readNotifications: [],
+    preferredName: PROFILE.preferredName,
+    pronouns: PROFILE.pronouns,
   });
   const [toastMsg, setToastMsg] = useState("");
   const timer = useRef();

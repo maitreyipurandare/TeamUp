@@ -973,6 +973,26 @@ export function Notifications({ ctx }) {
 }
 
 export function Profile({ ctx }) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState({
+    preferredName: ctx.S.preferredName,
+    pronouns: ctx.S.pronouns,
+  });
+
+  const startEditing = () => {
+    setDraft({
+      preferredName: ctx.S.preferredName,
+      pronouns: ctx.S.pronouns,
+    });
+    setEditing(true);
+  };
+
+  const saveProfile = () => {
+    ctx.set(draft);
+    setEditing(false);
+    ctx.toast("Profile updated");
+  };
+
   return (
     <>
       <TopBar title="Profile" onBack={() => ctx.root("home")} />
@@ -987,15 +1007,73 @@ export function Profile({ ctx }) {
         </div>
       </div>
 
-      <Section title="About" />
+      <Section
+        title="About"
+        right={
+          editing ? (
+            <div className="profile-edit-actions">
+              <button
+                type="button"
+                className="profile-text-button"
+                onClick={() => setEditing(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="profile-text-button"
+                onClick={saveProfile}
+              >
+                Save
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="profile-text-button"
+              onClick={startEditing}
+            >
+              Edit
+            </button>
+          )
+        }
+      />
       <div className="info profile-info">
         <div className="irow">
-          <span>Preferred name</span>
-          <b>{PROFILE.preferredName}</b>
+          <label htmlFor="profile-preferred-name">Preferred name</label>
+          {editing ? (
+            <input
+              id="profile-preferred-name"
+              className="profile-field"
+              value={draft.preferredName}
+              onChange={(event) =>
+                setDraft((current) => ({
+                  ...current,
+                  preferredName: event.target.value,
+                }))
+              }
+            />
+          ) : (
+            <b>{ctx.S.preferredName}</b>
+          )}
         </div>
         <div className="irow">
-          <span>Pronouns</span>
-          <b>{PROFILE.pronouns}</b>
+          <label htmlFor="profile-pronouns">Pronouns</label>
+          {editing ? (
+            <input
+              id="profile-pronouns"
+              className="profile-field"
+              value={draft.pronouns}
+              onChange={(event) =>
+                setDraft((current) => ({
+                  ...current,
+                  pronouns: event.target.value,
+                }))
+              }
+            />
+          ) : (
+            <b>{ctx.S.pronouns}</b>
+          )}
         </div>
       </div>
 
