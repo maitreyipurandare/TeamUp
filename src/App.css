@@ -180,7 +180,46 @@ h3 {
   opacity: 1;
 }
 .search .f {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
   color: var(--red);
+  cursor: pointer;
+}
+.search .f.active {
+  background: var(--pink);
+}
+.search-filters {
+  margin: -8px 0 18px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.search-filter-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--mut);
+  font: 600 11px Outfit;
+}
+.search-filters .pills {
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.open-teams-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.open-teams-filter input {
+  accent-color: var(--red);
 }
 .tiles {
   display: grid;

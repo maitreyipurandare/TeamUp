@@ -1,4 +1,4 @@
-import { CLUBS, INTRA, SEARCH } from "./data.js";
+import { CLUBS, INTRA, SEARCH, TEAMS } from "./data.js";
 
 // ---- Build one searchable list of clubs + intramural leagues ----
 const covered = (t) =>
@@ -11,6 +11,23 @@ const INDEX = [
   ...SEARCH.map((r) => ({
     ...r,
     sport: r.k === "i" ? r.t.split(" ")[0] : undefined,
+    genders:
+      r.k === "i"
+        ? [
+            ...new Set(
+              INTRA.filter((row) => row[0] === r.t.split(" ")[0]).map(
+                (row) => (row[1] === "Co-Rec" ? "Co-Ed" : row[1])
+              )
+            ),
+          ]
+        : [
+            CLUBS.find((club) => club.n === r.t)?.g ||
+              (r.t.startsWith("Women's")
+                ? "Women's"
+                : r.t.startsWith("Men's")
+                  ? "Men's"
+                  : "Co-Ed"),
+          ],
   })),
   // every club from Discover Clubs
   ...CLUBS.filter((c) => !SEARCH.some((r) => r.t === c.n)).map((c) => ({
@@ -19,6 +36,7 @@ const INDEX = [
     d: c.d,
     w: `${c.m} members`,
     l: c.g,
+    genders: [c.g],
   })),
   // one league per intramural sport
   ...[...new Set(INTRA.map((i) => i[0]))]
@@ -32,8 +50,31 @@ const INDEX = [
         d: rows[0][2],
         w: `Divisions: ${rows.map((r) => r[1]).join(", ")}`,
         l: `Closes ${rows[0][4]}`,
+        genders: [
+          ...new Set(
+            rows.map((row) => (row[1] === "Co-Rec" ? "Co-Ed" : row[1]))
+          ),
+        ],
       };
     }),
+  ...TEAMS.map((team) => ({
+    k: "t",
+    t: team[0],
+    sport: "Basketball",
+    d: team[1],
+    w: team[3],
+    l: team[4],
+    genders: [
+      team[4].startsWith("Co-Rec")
+        ? "Co-Ed"
+        : team[4].startsWith("Women's")
+          ? "Women's"
+          : "Men's",
+    ],
+    open: team[5],
+    spots: team[2],
+    team,
+  })),
 ];
 
 // ---- Fuzzy matching ----

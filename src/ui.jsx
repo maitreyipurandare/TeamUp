@@ -38,6 +38,9 @@ export function BrandBar({ onBack, onHelp, onGear }) {
 export function SearchBar({
   placeholder = "Search club and intramurals...",
   filter = true,
+  onFilterClick,
+  filtersActive = false,
+  filtersExpanded = false,
   ...inputProps
 }) {
   return (
@@ -49,7 +52,18 @@ export function SearchBar({
         placeholder={placeholder}
         {...inputProps}
       />
-      {filter && (
+      {filter && onFilterClick && (
+        <button
+          type="button"
+          className={"f" + (filtersActive ? " active" : "")}
+          aria-label="Search filters"
+          aria-expanded={filtersExpanded}
+          onClick={onFilterClick}
+        >
+          <Icon name="sliders" />
+        </button>
+      )}
+      {filter && !onFilterClick && (
         <span className="f">
           <Icon name="sliders" />
         </span>

@@ -26,7 +26,10 @@ const norm = (s) => s.toLowerCase().replace(/[^a-z]/g, "");
 
 export function Home({ ctx }) {
   const [text, setText] = useState("");
-  const submit = () => ctx.go("search", { q: text.trim(), tab: "all" });
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
+  const { searchGender, openTeamsOnly } = ctx.S;
+  const submit = () =>
+    ctx.go("search", { q: text.trim(), tab: "all" });
   return (
     <>
       <BrandBar
@@ -38,7 +41,20 @@ export function Home({ ctx }) {
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && submit()}
         enterKeyHint="search"
+        onFilterClick={() => setFiltersExpanded((expanded) => !expanded)}
+        filtersActive={searchGender !== "All" || openTeamsOnly}
+        filtersExpanded={filtersExpanded}
       />
+      {filtersExpanded && (
+        <SearchFilters
+          gender={searchGender}
+          onGenderChange={(gender) => ctx.set({ searchGender: gender })}
+          openTeamsOnly={openTeamsOnly}
+          onOpenTeamsChange={(openTeamsOnly) =>
+            ctx.set({ openTeamsOnly })
+          }
+        />
+      )}
       <div className="tiles">
         <button
           className="tile a"
@@ -217,9 +233,19 @@ export function Intramurals({ ctx }) {
 }
 
 export function Search({ ctx }) {
-  const { q, tab } = ctx.S;
-  const all = searchAll(q);
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
+  const { q, tab, searchGender, openTeamsOnly } = ctx.S;
+  const all = searchAll(q).filter((result) => {
+    if (openTeamsOnly) {
+      return result.k === "t" && result.open;
+    }
+    if (result.k === "t") return false;
+    return (
+      searchGender === "All" || result.genders?.includes(searchGender)
+    );
+  });
   const clubs = all.filter((r) => r.k === "c").length;
+  const teams = all.filter((r) => r.k === "t").length;
   const shown = all.filter((r) => tab === "all" || r.k === tab);
   return (
     <>
@@ -228,12 +254,26 @@ export function Search({ ctx }) {
         value={q}
         onChange={(e) => ctx.set({ q: e.target.value })}
         autoFocus
+        onFilterClick={() => setFiltersExpanded((expanded) => !expanded)}
+        filtersActive={searchGender !== "All" || openTeamsOnly}
+        filtersExpanded={filtersExpanded}
       />
+      {filtersExpanded && (
+        <SearchFilters
+          gender={searchGender}
+          onGenderChange={(gender) => ctx.set({ searchGender: gender })}
+          openTeamsOnly={openTeamsOnly}
+          onOpenTeamsChange={(openTeamsOnly) =>
+            ctx.set({ openTeamsOnly, tab: "all" })
+          }
+        />
+      )}
       <Pills
         items={[
           ["all", "All", all.length],
           ["c", "Clubs", clubs],
-          ["i", "Intramurals", all.length - clubs],
+          ["i", "Intramurals", all.filter((r) => r.k === "i").length],
+          ...(openTeamsOnly ? [["t", "Teams", teams]] : []),
         ]}
         value={tab}
         onChange={(t) => ctx.set({ tab: t })}
@@ -241,10 +281,12 @@ export function Search({ ctx }) {
       {shown.map((r) => (
         <div className="card res" key={r.t}>
           <div className="row">
-            <span className={"pk " + r.k}>
-              {r.k === "i" ? "Intramural" : "Club"}
+            <span className={"pk " + (r.k === "i" ? "i" : "c")}>
+              {r.k === "i" ? "Intramural" : r.k === "t" ? "Team" : "Club"}
             </span>
-            <span className="st dot">Open</span>
+            <span className="st dot">
+              {r.k === "t" ? `OPEN (${r.spots})` : "Open"}
+            </span>
           </div>
           <h3>{r.t}</h3>
           <p style={{ marginBottom: 0 }}>{r.d}</p>
@@ -257,7 +299,12 @@ export function Search({ ctx }) {
             <button
               className="btn"
               onClick={() =>
-                r.k === "i"
+                r.k === "t"
+                  ? ctx.go("detail", {
+                      detail: teamDetail(r.team, r.sport),
+                      waiver: false,
+                    })
+                  : r.k === "i"
                   ? ctx.go("teams", { team: r.sport })
                   : ctx.go("detail", {
                       detail: clubFromResult(r),
@@ -271,9 +318,39 @@ export function Search({ ctx }) {
         </div>
       ))}
       {!shown.length && (
-        <div className="empty">No clubs or leagues match “{q}”</div>
+        <div className="empty">
+          {openTeamsOnly
+            ? `No open teams match “${q}”`
+            : `No clubs or leagues match “${q}”`}
+        </div>
       )}
     </>
+  );
+}
+
+function SearchFilters({
+  gender,
+  onGenderChange,
+  openTeamsOnly,
+  onOpenTeamsChange,
+}) {
+  return (
+    <div className="search-filters">
+      <span className="search-filter-label">Division</span>
+      <Pills
+        items={GENDERS}
+        value={gender}
+        onChange={onGenderChange}
+      />
+      <label className="open-teams-filter">
+        <input
+          type="checkbox"
+          checked={openTeamsOnly}
+          onChange={(event) => onOpenTeamsChange(event.target.checked)}
+        />
+        <span>Open teams only</span>
+      </label>
+    </div>
   );
 }
 

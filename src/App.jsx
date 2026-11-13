@@ -22,6 +22,8 @@ export default function App() {
     q: "Basketball",
     tab: "all",
     gender: "All",
+    searchGender: "All",
+    openTeamsOnly: false,
     waiver: false,
     team: "Basketball",
     sel: null,
