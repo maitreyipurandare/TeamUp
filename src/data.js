@@ -298,7 +298,7 @@ export const FAQ = [
   ],
   [
     "What is the difference between clubs and intramurals?",
-    "Sports clubs are student-run organizations that focus on a specific sport. They typically offer regular practices, organized teams, and opportunities to compete against other universities. Intramurals are recreational sports leagues and tournaments where students compete against other student teams within the university.",
+    "Sports clubs are student-run organizations that focus on a specific sport and offer opportunities to compete against other universities. Intramurals are recreational sports leagues and tournaments where students compete against other student teams within the university.",
   ],
   [
     "Where can I see my upcoming games?",

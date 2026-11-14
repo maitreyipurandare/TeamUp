@@ -807,7 +807,7 @@ h3 {
   display: flex;
   justify-content: space-between;
   padding: 12px;
-  font: 700 12px Outfit;
+  font: 700 16px Outfit;
   text-align: left;
   cursor: pointer;
   color: var(--ink);
@@ -817,7 +817,7 @@ h3 {
 }
 .faq .a {
   padding: 0 12px 12px;
-  font-size: 11px;
+  font-size: 14px;
   color: #444;
   line-height: 1.5;
 }
